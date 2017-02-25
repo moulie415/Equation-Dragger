@@ -38,7 +38,6 @@ public class MainMenu implements Screen {
     private Skin skin;
     private Game game;
     private Viewport viewport;
-    private Camera camera;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
 
@@ -60,30 +59,38 @@ public class MainMenu implements Screen {
         font2 = new BitmapFont();
         style = new Label.LabelStyle(font, Color.BLACK);
 
+
         label = new Label("Hello world", style);
+        Pixmap labelColor = new Pixmap(300, 100, Pixmap.Format.RGB888);
+        labelColor.setColor(Color.PINK);
+        labelColor.fill();
+        label.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
         label.setPosition(100, Gdx.graphics.getHeight() - 50);
-        skin = new Skin();
-        buttonAtlas = new TextureAtlas("buttons/button.pack");
+
+        skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
+        //buttonAtlas = new TextureAtlas("buttons/button.pack");
+        buttonAtlas = skin.getAtlas();
         stage.addActor(label);
         skin.addRegions(buttonAtlas);
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.fontColor = Color.BLACK;
         buttonStyle.up = skin.getDrawable("button");
-        buttonStyle.over = skin.getDrawable("buttonpressed");
-        buttonStyle.down = skin.getDrawable("buttonpressed");
+        buttonStyle.over = skin.getDrawable("button-pressed-over");
+        buttonStyle.down = skin.getDrawable("button-pressed");
+        //buttonStyle.font = skin.getFont("font");
         buttonStyle.font = font;
 
         start = new TextButton("START", buttonStyle);
-        start.setSize(300,100);
+        start.setSize(350,100);
 
         tutorial = new TextButton("TUTORIAL", buttonStyle);
-        tutorial.setSize(300,100);
+        tutorial.setSize(350,100);
 
         stats = new TextButton("STATS", buttonStyle);
-        stats.setSize(300,100);
+        stats.setSize(350,100);
 
         about = new TextButton("ABOUT", buttonStyle);
-        about.setSize(300,100);
+        about.setSize(350,100);
 
         System.out.println(stage.getWidth());
         System.out.println(stage.getHeight());

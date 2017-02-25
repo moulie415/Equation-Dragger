@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
@@ -27,13 +28,19 @@ public class PlayScreen implements Screen {
     private Stage stage;
     private Game game;
     private Skin skin;
+    private Skin crispy;
+    private BitmapFont font;
     private float timeCount;
     private int timer;
     private Label timerLabel;
     private Viewport viewport;
-    private Camera camera;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
+    private Button close;
+    private Label.LabelStyle labelStyle;
+    private TextureAtlas buttonAtlas;
+    private TextButton.TextButtonStyle buttonStyle;
+    private TextButton.TextButtonStyle answerStyle;
 
 
 
@@ -46,11 +53,35 @@ public class PlayScreen implements Screen {
         viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here!
         stage = new Stage(viewport);
 
+
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
+        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+
+        buttonAtlas = crispy.getAtlas();
+        buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.up = crispy.getDrawable("button-close");
+        buttonStyle.over = crispy.getDrawable("button-close-over");
+        buttonStyle.down = crispy.getDrawable("button-close-pressed");
+
+        answerStyle = new TextButton.TextButtonStyle();
+        answerStyle.up = crispy.getDrawable("button");
+        answerStyle.over = crispy.getDrawable("button-over");
+        answerStyle.down = crispy.getDrawable("button-pressed");
+        answerStyle.font = font;
+
+        close = new Button(buttonStyle);
+
+        close.setSize(25,25);
+
+        stage.addActor(close);
+
+        close.setPosition(50, 650);
+
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 64;
+        parameter.size = 128;
 
         BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -78,6 +109,7 @@ public class PlayScreen implements Screen {
         Equation equation2 = new Equation();
         System.out.println(equation1.equationString());
         System.out.println(equation1.solveEquation());
+
 
         final Label equation = new Label(equation1.equationString(), skin);
 
@@ -122,15 +154,16 @@ public class PlayScreen implements Screen {
         });
 
 
+        //labelStyle = new Label.LabelStyle(font, Color.BLACK);
+
         for (String answer : equation1.generateAnswers()) {
-            final Label label = new Label(answer, skin);
+            final TextButton label = new TextButton(answer, answerStyle);
+
             //label.setStyle();
 
-
-
+            label.setSize(100, 100);
             label.setColor(Color.BLACK);
-            answersTable.add(label);
-            answersTable.add(" ");
+            answersTable.add(label).padRight(50);
 
 
             dragAndDrop.addSource(new DragAndDrop.Source(label) {
@@ -143,7 +176,7 @@ public class PlayScreen implements Screen {
                     //System.out.println(label.getText());
                     //if (label.getText().toString().equals(equation1.solveEquation())) {
 
-                    Label draggedLabel = new Label(label.getText(), skin);
+                    TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
                     draggedLabel.setColor(Color.BLACK);
 
                     payload.setDragActor(draggedLabel);
@@ -182,6 +215,15 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        close.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("closed");
+                game.setScreen(new MainMenu(game));
+                return true;
+            }
+        });
     }
 
     @Override
