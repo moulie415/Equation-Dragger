@@ -33,14 +33,19 @@ public class PlayScreen implements Screen {
     private float timeCount;
     private int timer;
     private Label timerLabel;
+    private Label feedback;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Button close;
+    private Button next;
+    private Label nextLabel;
     private Label.LabelStyle labelStyle;
     private TextureAtlas buttonAtlas;
     private TextButton.TextButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
+    private TextButton.TextButtonStyle nextStyle;
+    private Boolean isCorrect;
 
 
 
@@ -49,6 +54,8 @@ public class PlayScreen implements Screen {
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
+
+        isCorrect = false;
         //camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here!
         stage = new Stage(viewport);
@@ -69,6 +76,13 @@ public class PlayScreen implements Screen {
         answerStyle.over = crispy.getDrawable("button-over");
         answerStyle.down = crispy.getDrawable("button-pressed");
         answerStyle.font = font;
+
+        nextStyle = new TextButton.TextButtonStyle();
+        nextStyle.up = crispy.getDrawable("button-arcade");
+        nextStyle.down = crispy.getDrawable("button-arcade-pressed");
+        next = new Button(nextStyle);
+        next.setPosition(650, 500);
+        next.setVisible(false);
 
         close = new Button(buttonStyle);
 
@@ -96,14 +110,13 @@ public class PlayScreen implements Screen {
 
         timer = 20;
 
-
         timerLabel = new Label("20", test);
-
         timerLabel.setColor(Color.BLUE);
-
         timerLabel.setPosition(1000, 600);
 
-
+        nextLabel = new Label("next question", skin);
+        nextLabel.setVisible(false);
+        nextLabel.setColor(Color.BLACK);
 
         final Equation equation1 = new Equation();
         Equation equation2 = new Equation();
@@ -122,15 +135,21 @@ public class PlayScreen implements Screen {
 
         Table table = new Table();
 
-        //table.add(timerLabel);
+        feedback = new Label("", skin);
+
+        table.add(next);
+        table.add(nextLabel);
+        table.row();
+        table.add(feedback);
         table.row();
         table.add(equation);
-       table.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 );
+        table.setPosition(650, 500);
 
         Table answersTable = new Table(skin);
-        answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
+        //answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
+        answersTable.setPosition(650, 300);
 
-        DragAndDrop dragAndDrop = new DragAndDrop();
+        final DragAndDrop dragAndDrop = new DragAndDrop();
 
         dragAndDrop.addTarget(new Target(equation) {
             @Override
@@ -194,8 +213,16 @@ public class PlayScreen implements Screen {
                     if (target != null) {
                         if (label.getText().toString().equals(equation1.solveEquation())) {
                             System.out.println("correct");
+                            feedback.setColor(Color.GREEN);
+                            feedback.setText("correct!");
+                            dragAndDrop.clear();
+                            isCorrect = true;
+                            next.setVisible(true);
+                            nextLabel.setVisible(true);
                         } else {
                             System.out.println("false");
+                            feedback.setColor(Color.RED);
+                            feedback.setText("wrong, try again");
                         }
                     }
                     label.setVisible(true);
@@ -228,7 +255,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,1,0,1);
+        Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         update(Gdx.graphics.getDeltaTime());
@@ -257,12 +284,14 @@ public class PlayScreen implements Screen {
     }
 
     public void update(float dt) {
-        timeCount += dt;
-        if (timeCount >= 1 && timer > 0 ) {
-            timer--;
-            timerLabel.setText(String.format("%3d", timer));
-            timeCount = 0;
+        if (!isCorrect) {
+            timeCount += dt;
+            if (timeCount >= 1 && timer > 0) {
+                timer--;
+                timerLabel.setText(String.format("%3d", timer));
+                timeCount = 0;
 
+            }
         }
     }
 
