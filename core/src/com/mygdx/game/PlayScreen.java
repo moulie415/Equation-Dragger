@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
@@ -40,15 +41,13 @@ public class PlayScreen implements Screen {
     private Button close;
     private Button next;
     private Label nextLabel;
-    private Label.LabelStyle labelStyle;
-    private TextureAtlas buttonAtlas;
+    private Label attempts;
+    private int attempsCount;
     private TextButton.TextButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
-
-
 
     public PlayScreen(Game game) {
         this.game = game;
@@ -66,7 +65,6 @@ public class PlayScreen implements Screen {
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
 
-        buttonAtlas = crispy.getAtlas();
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
         buttonStyle.over = crispy.getDrawable("button-close-over");
@@ -84,8 +82,6 @@ public class PlayScreen implements Screen {
         equationStyle.down = crispy.getDrawable("button-pressed");
         equationStyle.font = font;
 
-
-
         nextStyle = new TextButton.TextButtonStyle();
         nextStyle.up = crispy.getDrawable("button-arcade");
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
@@ -95,7 +91,6 @@ public class PlayScreen implements Screen {
         next.setPosition(750,550);
 
 
-        //Color myOrange = new Color(255, 153, 51, 1);
 
         close = new Button(buttonStyle);
 
@@ -127,30 +122,36 @@ public class PlayScreen implements Screen {
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
+        attempsCount = 0;
+        attempts = new Label("attempts: " + attempsCount, skin);
+        attempts.setFontScale((float) 0.5);
+        attempts.setPosition(200, 600);
+        attempts.setColor(Color.BLACK);
+
         nextLabel = new Label("press for next question", skin);
         nextLabel.setPosition(400,550);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
+
+        stage.addActor(attempts);
         stage.addActor(nextLabel);
         stage.addActor(next);
 
         final Equation equation1 = new Equation();
-        Equation equation2 = new Equation();
-        System.out.println(equation1.equationString());
-        System.out.println(equation1.solveEquation());
-
 
         //final Label equation = new Label(equation1.equationString(), skin);
         final TextButton equation = new TextButton(equation1.equationString(), equationStyle);
 
-        //equation.setColor(myOrange);
+
+        //Color myOrange = new Color(0xff6600ff);
+       // equation.setColor(new Color(0xffffffff));
 
         Table table = new Table();
 
         feedback = new Label("", skin);
 
-        table.add(feedback);
+        table.add(feedback).padBottom(10);
         table.row();
         table.add(equation);
         table.setPosition(600, 500);
@@ -165,7 +166,6 @@ public class PlayScreen implements Screen {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
-
                 getActor().setColor(Color.BLUE);
 
                 return true;
@@ -173,7 +173,7 @@ public class PlayScreen implements Screen {
 
 
             public void reset (DragAndDrop.Source source, DragAndDrop.Payload payload) {
-                getActor().setColor(Color.ORANGE);
+                getActor().setColor(Color.WHITE);
             }
 
             @Override
@@ -181,9 +181,6 @@ public class PlayScreen implements Screen {
 
             }
         });
-
-
-        //labelStyle = new Label.LabelStyle(font, Color.BLACK);
 
         for (String answer : equation1.generateAnswers()) {
             final TextButton label = new TextButton(answer, answerStyle);
@@ -210,7 +207,6 @@ public class PlayScreen implements Screen {
 
                     payload.setDragActor(draggedLabel);
 
-
                     return payload;
                 }
 
@@ -221,6 +217,8 @@ public class PlayScreen implements Screen {
 
                     System.out.println();
                     if (target != null) {
+                        attempsCount +=1;
+                        attempts.setText("attempts: " + attempsCount);
                         if (label.getText().toString().equals(equation1.solveEquation())) {
                             System.out.println("correct");
                             feedback.setColor(Color.GREEN);
@@ -242,7 +240,6 @@ public class PlayScreen implements Screen {
 
         stage.addActor(timerLabel);
 
-
         stage.addActor(table);
 
         stage.addActor(answersTable);
@@ -258,6 +255,18 @@ public class PlayScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game));
+                return true;
+            }
+        });
+
+        next.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("clicked");
+
+                game.setScreen(new PlayScreen(game));
+
                 return true;
             }
         });
