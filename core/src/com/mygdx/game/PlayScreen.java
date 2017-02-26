@@ -45,6 +45,7 @@ public class PlayScreen implements Screen {
     private TextButton.TextButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
+    private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
 
 
@@ -77,12 +78,24 @@ public class PlayScreen implements Screen {
         answerStyle.down = crispy.getDrawable("button-pressed");
         answerStyle.font = font;
 
+        equationStyle = new TextButton.TextButtonStyle();
+        equationStyle.up = crispy.getDrawable("button");
+        equationStyle.over = crispy.getDrawable("button-over");
+        equationStyle.down = crispy.getDrawable("button-pressed");
+        equationStyle.font = font;
+
+
+
         nextStyle = new TextButton.TextButtonStyle();
         nextStyle.up = crispy.getDrawable("button-arcade");
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
         next = new Button(nextStyle);
         next.setPosition(650, 500);
         next.setVisible(false);
+        next.setPosition(750,550);
+
+
+        //Color myOrange = new Color(255, 153, 51, 1);
 
         close = new Button(buttonStyle);
 
@@ -114,9 +127,13 @@ public class PlayScreen implements Screen {
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
-        nextLabel = new Label("next question", skin);
+        nextLabel = new Label("press for next question", skin);
+        nextLabel.setPosition(400,550);
+        nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
+        stage.addActor(nextLabel);
+        stage.addActor(next);
 
         final Equation equation1 = new Equation();
         Equation equation2 = new Equation();
@@ -124,26 +141,19 @@ public class PlayScreen implements Screen {
         System.out.println(equation1.solveEquation());
 
 
-        final Label equation = new Label(equation1.equationString(), skin);
+        //final Label equation = new Label(equation1.equationString(), skin);
+        final TextButton equation = new TextButton(equation1.equationString(), equationStyle);
 
-
-        //equation.setSize(100,100);
-        System.out.println(equation.getFontScaleX());
-        System.out.println(equation.getFontScaleY());
-
-        equation.setColor(Color.BLACK);
+        //equation.setColor(myOrange);
 
         Table table = new Table();
 
         feedback = new Label("", skin);
 
-        table.add(next);
-        table.add(nextLabel);
-        table.row();
         table.add(feedback);
         table.row();
         table.add(equation);
-        table.setPosition(650, 500);
+        table.setPosition(600, 500);
 
         Table answersTable = new Table(skin);
         //answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
@@ -163,7 +173,7 @@ public class PlayScreen implements Screen {
 
 
             public void reset (DragAndDrop.Source source, DragAndDrop.Payload payload) {
-                getActor().setColor(Color.BLACK);
+                getActor().setColor(Color.ORANGE);
             }
 
             @Override
