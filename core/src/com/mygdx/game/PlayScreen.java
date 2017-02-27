@@ -125,7 +125,7 @@ public class PlayScreen implements Screen {
         attempsCount = 0;
         attempts = new Label("attempts: " + attempsCount, skin);
         attempts.setFontScale((float) 0.5);
-        attempts.setPosition(200, 600);
+        attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
 
         nextLabel = new Label("press for next question", skin);
