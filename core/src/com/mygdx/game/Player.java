@@ -17,9 +17,45 @@ public class Player implements Serializable {
     private int ratio;
 
     public Player() {
-
-
+        attempts = 0;
+        correctCount = 0;
+        wrongCount = 0;
+        ratio = 0;
     }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public int getCorrectCount() {
+        return correctCount;
+    }
+
+    public int getWrongCount() {
+        return wrongCount;
+    }
+
+    public int getRatio() {
+        return ratio;
+    }
+
+    public void incAttempts() {
+        attempts +=1;
+    }
+
+
+    public void incCorrectCount() {
+        correctCount +=1;
+        ratio = correctCount/wrongCount;
+    }
+
+    public void incWrongCount() {
+        wrongCount +=1;
+        ratio = correctCount/wrongCount;
+    }
+
+
+
     public static void savePlayer(Player player) throws IOException {
         FileHandle file = Gdx.files.local("player.dat");
         OutputStream out = null;
@@ -35,8 +71,9 @@ public class Player implements Serializable {
         System.out.println("Saving Player");
     }
 
-    public static Player readPlayer () throws IOException, ClassNotFoundException {
+    public static Player readPlayer() throws IOException, ClassNotFoundException {
         Player player = null;
+
         FileHandle file = Gdx.files.local("player.dat");
         player = (Player) deserialize(file.readBytes());
 

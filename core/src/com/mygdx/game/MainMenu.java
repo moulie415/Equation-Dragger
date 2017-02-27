@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sun.prism.image.ViewPort;
 
+import java.io.IOException;
+
 /**
  * Created by henrymoule on 04/01/2017.
  */
@@ -37,12 +39,14 @@ public class MainMenu implements Screen {
     private TextButton about;
     private Skin skin;
     private Game game;
+    private Player player;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
 
-    public MainMenu(Game game) {
+    public MainMenu(Game game, Player player ) {
         this.game = game;
+        this.player = player;
     }
 
     @Override
@@ -111,7 +115,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("clicked");
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new PlayScreen(game, player));
 
 
                 return true;
@@ -186,6 +190,13 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+
+        try {
+            player.savePlayer(player);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

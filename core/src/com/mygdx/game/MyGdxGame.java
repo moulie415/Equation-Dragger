@@ -12,16 +12,45 @@ TODO add player class for storing stats
 
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+
+import java.io.IOException;
 
 public class MyGdxGame extends Game {
 
 	private Game game;
+	private Player player;
 
 
 	@Override
-	public void create () {
+	public void create ()  {
 		game = this;
-		game.setScreen(new MainMenu(game));
+		if (Gdx.files.local("player.dat").exists()) {
+			try {
+				player = Player.readPlayer();
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Player Exits, Reading File");
+			System.out.println(player.getAttempts());
+			System.out.println(player.getCorrectCount());
+			System.out.println(player.getWrongCount());
+		}
+		else {
+			player = new Player();
+			try {
+				Player.savePlayer(player);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Player Does Not Exist, Creating Player and Saving Player");
+		}
+		game.setScreen(new MainMenu(game, player));
 	}
 
 	@Override
@@ -33,5 +62,12 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void dispose () {
+		try {
+			player.savePlayer(player);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

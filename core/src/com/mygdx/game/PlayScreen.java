@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.IOException;
+
 
 /**
  * Created by henrymoule on 31/12/2016.
@@ -28,6 +30,7 @@ public class PlayScreen implements Screen {
 
     private Stage stage;
     private Game game;
+    private Player player;
     private Skin skin;
     private Skin crispy;
     private BitmapFont font;
@@ -42,15 +45,16 @@ public class PlayScreen implements Screen {
     private Button next;
     private Label nextLabel;
     private Label attempts;
-    private int attempsCount;
+    private int attemptsCount;
     private TextButton.TextButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
 
-    public PlayScreen(Game game) {
+    public PlayScreen(Game game, Player player) {
         this.game = game;
+        this.player = player;
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -122,8 +126,8 @@ public class PlayScreen implements Screen {
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
-        attempsCount = 0;
-        attempts = new Label("attempts: " + attempsCount, skin);
+        attemptsCount = 0;
+        attempts = new Label("attempts: " + attemptsCount, skin);
         attempts.setFontScale((float) 0.5);
         attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
@@ -217,8 +221,9 @@ public class PlayScreen implements Screen {
 
                     System.out.println();
                     if (target != null) {
-                        attempsCount +=1;
-                        attempts.setText("attempts: " + attempsCount);
+                        attemptsCount +=1;
+                        incAttempts();
+                        attempts.setText("attempts: " + attemptsCount);
                         if (label.getText().toString().equals(equation1.solveEquation())) {
                             System.out.println("correct");
                             feedback.setColor(Color.GREEN);
@@ -227,11 +232,15 @@ public class PlayScreen implements Screen {
                             isCorrect = true;
                             next.setVisible(true);
                             nextLabel.setVisible(true);
+                            incCorrectCount();
+
                         } else {
                             System.out.println("false");
                             feedback.setColor(Color.RED);
                             feedback.setText("wrong, try again");
+                            incWrongCount();
                         }
+
                     }
                     label.setVisible(true);
                 }
@@ -254,7 +263,7 @@ public class PlayScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
-                game.setScreen(new MainMenu(game));
+                game.setScreen(new MainMenu(game, player));
                 return true;
             }
         });
@@ -265,7 +274,7 @@ public class PlayScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("clicked");
 
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new PlayScreen(game, player));
 
                 return true;
             }
@@ -317,6 +326,24 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        try {
+            player.savePlayer(player);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
+
+    public void incAttempts() {
+        player.incAttempts();
+    }
+
+    public void incCorrectCount() {
+        player.incCorrectCount();
+    }
+
+    public void incWrongCount() {
+        player.incWrongCount();
     }
 }
