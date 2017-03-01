@@ -27,12 +27,12 @@ import java.io.IOException;
 public class MainMenu implements Screen {
 
     private Stage stage;
-    private Label label;
     private Label.LabelStyle style;
     private BitmapFont font;
     private BitmapFont font2;
     private TextureAtlas buttonAtlas;
     private TextButton.TextButtonStyle buttonStyle;
+
     private TextButton start;
     private TextButton tutorial;
     private TextButton stats;
@@ -64,17 +64,9 @@ public class MainMenu implements Screen {
         style = new Label.LabelStyle(font, Color.BLACK);
 
 
-        label = new Label("Hello world", style);
-        Pixmap labelColor = new Pixmap(300, 100, Pixmap.Format.RGB888);
-        labelColor.setColor(Color.PINK);
-        labelColor.fill();
-        label.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
-        label.setPosition(100, Gdx.graphics.getHeight() - 50);
-
         skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         //buttonAtlas = new TextureAtlas("buttons/button.pack");
         buttonAtlas = skin.getAtlas();
-        stage.addActor(label);
         skin.addRegions(buttonAtlas);
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.fontColor = Color.BLACK;
@@ -114,7 +106,6 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("clicked");
                 game.setScreen(new PlayScreen(game, player));
 
 
@@ -126,7 +117,6 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("clicked");
 
                 game.setScreen(new TestClass(game));
 
@@ -138,13 +128,24 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("clicked");
 
                 game.setScreen(new About(game));
 
                 return true;
             }
         });
+
+        stats.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                game.setScreen(new Stats(game, player));
+
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -153,15 +154,6 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) ) {
-            if (Gdx.input.getY() > Gdx.graphics.getHeight()/2) {
-                label.setPosition(label.getX(), label.getY() + 2);
-            }
-            else {
-                label.setPosition(label.getX(), label.getY() - 2);
-            }
-
-        }
 
     }
 

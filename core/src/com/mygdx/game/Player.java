@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import java.io.*;
+import java.math.BigDecimal;
 
 /**
  * Created by henrymoule on 27/02/2017.
@@ -14,13 +15,11 @@ public class Player implements Serializable {
     private int attempts;
     private int correctCount;
     private int wrongCount;
-    private int ratio;
 
     public Player() {
         attempts = 0;
         correctCount = 0;
         wrongCount = 0;
-        ratio = 0;
     }
 
     public int getAttempts() {
@@ -35,8 +34,17 @@ public class Player implements Serializable {
         return wrongCount;
     }
 
-    public int getRatio() {
-        return ratio;
+    public float getRatio() {
+        float correct = correctCount;
+        float wrong = wrongCount;
+        float ratio = correct/wrong;
+        System.out.println(ratio);
+        if (ratio > 0) {
+            return round(ratio, 2);
+        }
+        else {
+            return 0;
+        }
     }
 
     public void incAttempts() {
@@ -46,12 +54,10 @@ public class Player implements Serializable {
 
     public void incCorrectCount() {
         correctCount +=1;
-        ratio = correctCount/wrongCount;
     }
 
     public void incWrongCount() {
         wrongCount +=1;
-        ratio = correctCount/wrongCount;
     }
 
 
@@ -92,4 +98,18 @@ public class Player implements Serializable {
         ObjectInputStream o = new ObjectInputStream(b);
         return o.readObject();
     }
+
+    /**
+     * Round to certain number of decimals
+     *
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
+
 }

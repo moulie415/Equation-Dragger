@@ -46,7 +46,7 @@ public class PlayScreen implements Screen {
     private Label nextLabel;
     private Label attempts;
     private int attemptsCount;
-    private TextButton.TextButtonStyle buttonStyle;
+    private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
@@ -69,7 +69,7 @@ public class PlayScreen implements Screen {
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
 
-        buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
         buttonStyle.over = crispy.getDrawable("button-close-over");
         buttonStyle.down = crispy.getDrawable("button-close-pressed");
@@ -98,7 +98,7 @@ public class PlayScreen implements Screen {
 
         close = new Button(buttonStyle);
 
-        close.setSize(25,25);
+        close.setSize(50,50);
 
         stage.addActor(close);
 
