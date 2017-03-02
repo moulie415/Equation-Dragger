@@ -16,17 +16,19 @@ public class Equation {
     private String operator;
 
     public Equation() {
-        multiplier = randInt(2, 10);
-        LHSNumber = randInt(1, 20);
-        RHSNumber = randInt(1, 20);
-        int randomOperator = randInt(1,2);
+        do {
+            multiplier = randInt(2, 10);
+            LHSNumber = randInt(1, 20);
+            RHSNumber = randInt(1, 20);
+            int randomOperator = randInt(1, 2);
 
-        if (randomOperator == 1) {
-            operator = "+";
-        }
-        else {
-            operator = "-";
-        }
+            if (randomOperator == 1) {
+                operator = "+";
+            } else {
+                operator = "-";
+            }
+        } while (answer() % 1 != 0);
+
     }
 
     public String equationString() {
@@ -34,41 +36,35 @@ public class Equation {
     }
 
     public String solveEquation() {
+        return Integer.toString(Math.round(answer()));
+
+    }
+
+    public float answer() {
         float answer;
         if (operator.equals("+")) {
             answer = (RHSNumber - LHSNumber) / multiplier;
-                return isWhole(answer);
-        }
-        else {
-            answer = (RHSNumber + LHSNumber) / multiplier;
-            return isWhole(answer);
-        }
-    }
 
-    public String isWhole(float answer) {
-        if (answer % 1 == 0) {
-            return Integer.toString(Math.round(answer));
+        } else {
+            answer = (RHSNumber + LHSNumber) / multiplier;
+
         }
-        else {
-            if (operator.equals("+")) {
-                return Integer.toString(Math.round(RHSNumber - LHSNumber)) + "/" + Integer.toString(Math.round(multiplier));
-            }
-            else {
-                return Integer.toString(Math.round(RHSNumber + LHSNumber)) + "/" + Integer.toString(Math.round(multiplier));
-            }
-        }
+        return  answer;
     }
 
     public ArrayList<String> generateAnswers() {
         ArrayList<String> answers= new ArrayList<String>();
-        int num = randInt(1, 10);
-        //add actual answer to begin with
-        answers.add(solveEquation());
-        answers.add(Integer.toString(num));
-        answers.add(Integer.toString(num*-1));
-        if (num != multiplier) {
-            answers.add(Integer.toString(num) + "/" + Integer.toString(Math.round(multiplier)));
+        for (int i = 0; i < 7; i++) {
+            int num;
+            do {
+                num = randInt(1, 10);
+                if (i % 2 != 0) {
+                    num = num*-1;
+                }
+            } while (num == answer() || answers.contains(Integer.toString(num)) );
+            answers.add(Integer.toString(num));
         }
+        answers.add(solveEquation());
 
         Collections.shuffle(answers);
         return answers;
