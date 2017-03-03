@@ -78,7 +78,7 @@ public class Equation {
      * @param max maximum number you want to return
      * @return returns random number in between min and max
      */
-    public int randInt(int min, int max) {
+    public static int randInt(int min, int max) {
 
         Random rand =  new Random();
 
