@@ -66,9 +66,9 @@ public class PlayScreen implements Screen {
         stage = new Stage(viewport);
 
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
-        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        skin = new Skin(Gdx.files.local("uiskin.json"));
+        crispy = new Skin(Gdx.files.local("clean-crispy/skin/clean-crispy-ui.json"));
+        font = new BitmapFont(Gdx.files.local("font.fnt"), false);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -106,11 +106,11 @@ public class PlayScreen implements Screen {
         close.setPosition(50, 650);
 
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
+/*        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 128;
 
-        BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
+        BitmapFont font12 = generator.generateFont(parameter); // font size 128 pixels
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 
@@ -119,11 +119,12 @@ public class PlayScreen implements Screen {
         test.addRegions(new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         test.add("default-font", font12);
 
-        test.load(Gdx.files.internal("digital.json"));
+        test.load(Gdx.files.internal("digital.json"));*/
 
         timer = 20;
 
-        timerLabel = new Label("20", test);
+        //timerLabel = new Label("20", test);
+        timerLabel = new Label("20", skin);
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
@@ -323,7 +324,7 @@ public class PlayScreen implements Screen {
             timeCount += dt;
             if (timeCount >= 1 && timer > 0) {
                 timer--;
-                timerLabel.setText(String.format("%3d", timer));
+                timerLabel.setText(Integer.toString(timer));
                 timeCount = 0;
 
             }
@@ -333,12 +334,6 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        try {
-            player.savePlayer(player);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
