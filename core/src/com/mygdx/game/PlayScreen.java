@@ -45,6 +45,7 @@ public class PlayScreen implements Screen {
     private Button next;
     private Label nextLabel;
     private Label attempts;
+    private Label instruction;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
@@ -132,6 +133,11 @@ public class PlayScreen implements Screen {
         attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
 
+        instruction = new Label("solve for x", skin);
+        instruction.setPosition(450, 600);
+        instruction.setColor(Color.BLACK);
+
+
         nextLabel = new Label("press for next question", skin);
         nextLabel.setPosition(400,550);
         nextLabel.setFontScale((float)0.5);
@@ -141,6 +147,7 @@ public class PlayScreen implements Screen {
         stage.addActor(attempts);
         stage.addActor(nextLabel);
         stage.addActor(next);
+        stage.addActor(instruction);
 
         final Equation equation1 = new Equation();
 

@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
@@ -16,6 +15,8 @@ public class Equation {
     private String operator;
 
     public Equation() {
+
+        //do while to make sure x is a whole number
         do {
             multiplier = randInt(2, 10);
             LHSNumber = randInt(1, 20);

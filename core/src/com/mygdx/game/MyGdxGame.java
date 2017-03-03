@@ -5,9 +5,9 @@ package com.mygdx.game;
 
 /*
 TODO game ideas: work out algebra equation: drag and drop with timer (time bomb that ticks down)
-TODO add music
+TODO add music/sounds
 TODO elements to implement, points,badges, stats and leaderboards (if possible)
-TODO add player class for storing stats
+TODO implement simultaneous and quadratic equation sections
  */
 
 
