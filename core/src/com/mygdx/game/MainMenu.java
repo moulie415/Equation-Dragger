@@ -59,12 +59,12 @@ public class MainMenu implements Screen {
         stage = new Stage(viewport);
 
         Gdx.input.setInputProcessor(stage);
-        font = new BitmapFont(Gdx.files.local("font.fnt"), false);
+        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         font2 = new BitmapFont();
         style = new Label.LabelStyle(font, Color.BLACK);
 
 
-        skin = new Skin(Gdx.files.local("clean-crispy/skin/clean-crispy-ui.json"));
+        skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         //buttonAtlas = new TextureAtlas("buttons/button.pack");
         buttonAtlas = skin.getAtlas();
         skin.addRegions(buttonAtlas);

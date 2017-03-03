@@ -66,9 +66,9 @@ public class PlayScreen implements Screen {
         stage = new Stage(viewport);
 
 
-        skin = new Skin(Gdx.files.local("uiskin.json"));
-        crispy = new Skin(Gdx.files.local("clean-crispy/skin/clean-crispy-ui.json"));
-        font = new BitmapFont(Gdx.files.local("font.fnt"), false);
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
+        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
