@@ -33,7 +33,13 @@ public class Player {
     public float getRatio() {
         float correct = correctCount;
         float wrong = wrongCount;
-        float ratio = correct/wrong;
+        float ratio;
+        if (wrong > 0) {
+            ratio = correct / wrong;
+        }
+        else {
+            ratio = correct;
+        }
         System.out.println(ratio);
         if (ratio > 0) {
             return round(ratio, 2);
