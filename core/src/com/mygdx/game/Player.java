@@ -15,11 +15,17 @@ public class Player implements Serializable {
     private int attempts;
     private int correctCount;
     private int wrongCount;
+    private boolean section1;
+    private boolean section2;
+    private boolean section3;
 
     public Player() {
         attempts = 0;
         correctCount = 0;
         wrongCount = 0;
+        section1 = false;
+        section2 = false;
+        section3 = false;
     }
 
     public int getAttempts() {
@@ -116,6 +122,35 @@ public class Player implements Serializable {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
+    }
+
+    public void completeSection(int i) {
+        switch(i) {
+            case 1: section1 = true;
+                break;
+            case 2: section2 = true;
+                break;
+            case 3: section3 = true;
+                break;
+            default:
+                System.out.println("invalid section number");
+        }
+    }
+
+    public boolean getSection(int i) {
+        boolean section;
+        switch(i) {
+            case 1: section = section1;
+            break;
+            case 2: section = section2;
+            break;
+            case 3: section = section3;
+            break;
+            default:
+                System.out.println("invalid section number");
+                section = false;
+        }
+        return section;
     }
 
 }
