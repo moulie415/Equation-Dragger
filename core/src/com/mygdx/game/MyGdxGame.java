@@ -24,6 +24,11 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void create ()  {
+		Simultaneous test = new Simultaneous();
+		System.out.println(test.firstToString());
+		System.out.println(test.secondToString());
+		System.out.println("x = " + test.getX());
+		System.out.println("y = " + test.getY());
 		game = this;
 		if (Gdx.files.local("player.dat").exists()) {
 			try {
