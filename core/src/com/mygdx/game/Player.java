@@ -15,14 +15,21 @@ public class Player implements Serializable {
     private int attempts;
     private int correctCount;
     private int wrongCount;
+    private int section1Points;
+    private int section2Points;
+    private int section3Points;
     private boolean section1;
     private boolean section2;
     private boolean section3;
+
 
     public Player() {
         attempts = 0;
         correctCount = 0;
         wrongCount = 0;
+        section1Points = 0;
+        section2Points = 0;
+        section3Points = 0;
         section1 = false;
         section2 = false;
         section3 = false;
@@ -70,6 +77,31 @@ public class Player implements Serializable {
 
     public void incWrongCount() {
         wrongCount +=1;
+    }
+
+    public void section1Score(boolean change) {
+        if (change) {
+            section1Points += 10;
+        }
+        else {
+            section1Points -=5;
+        }
+    }
+    public void section2Score(boolean change) {
+        if (change) {
+            section2Points += 10;
+        }
+        else {
+            section2Points -=5;
+        }
+    }
+    public void section3Score(boolean change) {
+        if (change) {
+            section3Points += 10;
+        }
+        else {
+            section3Points -=5;
+        }
     }
 
 
