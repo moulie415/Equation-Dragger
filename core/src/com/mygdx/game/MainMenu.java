@@ -92,10 +92,10 @@ public class MainMenu implements Screen {
         System.out.println(stage.getHeight());
         System.out.println(Gdx.graphics.getWidth());
         System.out.println(Gdx.graphics.getHeight());
-        start.setPosition(500, 600 );
-        tutorial.setPosition(500, 450);
-        stats.setPosition(500, 300);
-        about.setPosition(500, 150);
+        start.setPosition(500, 550 );
+        tutorial.setPosition(500, 400);
+        stats.setPosition(500, 250);
+        about.setPosition(500, 100);
 
         stage.addActor(start);
         stage.addActor(tutorial);

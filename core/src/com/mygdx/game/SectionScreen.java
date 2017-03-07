@@ -12,9 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
-import javax.xml.soap.Text;
 
 /**
  * Created by henrymoule on 06/03/2017.
@@ -23,7 +21,6 @@ public class SectionScreen implements Screen {
     private Stage stage;
     private Player player;
     private Game game;
-    private Skin skin;
     private Skin crispy;
     private BitmapFont font;
     private Viewport viewport;
@@ -35,6 +32,7 @@ public class SectionScreen implements Screen {
     private TextButton section3;
     private TextButton.TextButtonStyle sectionStyle;
     private Button.ButtonStyle buttonStyle;
+    private Skin skin;
 
     public SectionScreen(Game game, Player player) {
         this.game = game;
@@ -49,6 +47,8 @@ public class SectionScreen implements Screen {
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         font.setColor(Color.BLACK);
+
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -87,14 +87,16 @@ public class SectionScreen implements Screen {
         stage.addActor(section2);
         stage.addActor(section3);
 
+
     }
 
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        final SectionDialog dialog = new SectionDialog("Section not accessible yet", crispy);
-        //dialog.sizeBy(300, 300);
+
+
+        final SectionDialog dialog = new SectionDialog("", skin);
         close.addListener(new InputListener(){
 
             @Override
@@ -185,28 +187,4 @@ public class SectionScreen implements Screen {
 
     }
 
-    public static class SectionDialog extends Dialog {
-
-        public SectionDialog(String title, Skin skin) {
-            super(title, skin);
-        }
-
-        public SectionDialog(String title, Skin skin, String windowStyleName) {
-            super(title, skin, windowStyleName);
-        }
-
-        public SectionDialog(String title, WindowStyle windowStyle) {
-            super(title, windowStyle);
-
-        }
-
-        {
-            text("Please complete previous sections first");
-           button("OK");
-        }
-
-        @Override
-        protected void result(Object object) {
-        }
-    }
 }
