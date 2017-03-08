@@ -18,6 +18,9 @@ public class Player implements Serializable {
     private boolean section1;
     private boolean section2;
     private boolean section3;
+    private int section1Points;
+    private int section2Points;
+    private int section3Points;
 
     public Player() {
         attempts = 0;
@@ -26,6 +29,9 @@ public class Player implements Serializable {
         section1 = false;
         section2 = false;
         section3 = false;
+        section1Points = 0;
+        section2Points = 0;
+        section3Points = 0;
     }
 
     public int getAttempts() {
@@ -70,6 +76,73 @@ public class Player implements Serializable {
 
     public void incWrongCount() {
         wrongCount +=1;
+    }
+
+    public void incPoints(int section,int timeBonus) {
+            switch (section) {
+                case 1:
+                    section1Points += 10;
+                    section1Points += timeBonus;
+                    break;
+                case 2:
+                    section2Points += 10;
+                    section2Points += timeBonus;
+                    break;
+                case 3:
+                    section3Points += 10;
+                    section3Points += timeBonus;
+                default:
+                    System.out.println("Invalid section number");
+            }
+
+    }
+
+    public void decPoints(int section) {
+        switch(section) {
+            case 1:
+            if ((getPoints(1)-5) < 0) {
+                section1Points = 0;
+            }
+            else {
+                section1Points -=5;
+            }
+                break;
+            case 2:
+                if ((getPoints(2)-5) < 0) {
+                    section2Points = 0;
+                }
+                else {
+                    section2Points -=5;
+                }
+                break;
+            case 3:
+                if ((getPoints(3)-5) < 0) {
+                    section3Points = 0;
+                }
+                else {
+                    section3Points -=5;
+                }
+            default:
+                System.out.println("Invalid section number");
+        }
+
+
+    }
+
+    public int getPoints(int section) {
+        int points;
+        switch(section) {
+            case 1: points = section1Points;
+                break;
+            case 2: points = section2Points;
+                break;
+            case 3: points = section3Points;
+                break;
+            default:
+                points = 0;
+                System.out.println("Invalid section number");
+        }
+        return points;
     }
 
 

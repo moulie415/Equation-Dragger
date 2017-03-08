@@ -27,6 +27,7 @@ public class Stats implements Screen {
     private Label correct;
     private Label wrong;
     private Label ratio;
+    private Label totalPoints;
     private Skin crispy;
     private Button close;
     private Label.LabelStyle style;
@@ -81,6 +82,11 @@ public class Stats implements Screen {
         ratio = new Label("Ratio: " + player.getRatio(), style);
         ratio.setPosition(400, 200);
         stage.addActor(ratio);
+
+        totalPoints = new Label("Total points: " + (player.getPoints(1)+player.getPoints(2)
+                +player.getPoints(3)), style);
+        totalPoints.setPosition(400, 100);
+        stage.addActor(totalPoints);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
