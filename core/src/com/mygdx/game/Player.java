@@ -15,9 +15,6 @@ public class Player implements Serializable {
     private int attempts;
     private int correctCount;
     private int wrongCount;
-    private int section1Points;
-    private int section2Points;
-    private int section3Points;
     private boolean section1;
     private boolean section2;
     private boolean section3;
@@ -85,31 +82,6 @@ public class Player implements Serializable {
         wrongCount +=1;
     }
 
-<<<<<<< HEAD
-    public void section1Score(boolean change) {
-        if (change) {
-            section1Points += 10;
-        }
-        else {
-            section1Points -=5;
-        }
-    }
-    public void section2Score(boolean change) {
-        if (change) {
-            section2Points += 10;
-        }
-        else {
-            section2Points -=5;
-        }
-    }
-    public void section3Score(boolean change) {
-        if (change) {
-            section3Points += 10;
-        }
-        else {
-            section3Points -=5;
-        }
-=======
     public void incPoints(int section,int timeBonus) {
             switch (section) {
                 case 1:
@@ -175,7 +147,6 @@ public class Player implements Serializable {
                 System.out.println("Invalid section number");
         }
         return points;
->>>>>>> f6f40e5b55171f196cd79175963d1d2fef9da2df
     }
 
 
