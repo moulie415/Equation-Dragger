@@ -46,12 +46,15 @@ public class PlayScreen implements Screen {
     private Label nextLabel;
     private Label attempts;
     private Label instruction;
+    private Label points;
+    private Label timeBonus;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
+    private PlayDialog dialog;
 
     public PlayScreen(Game game, Player player) {
         this.game = game;
@@ -91,9 +94,8 @@ public class PlayScreen implements Screen {
         nextStyle.up = crispy.getDrawable("button-arcade");
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
         next = new Button(nextStyle);
-        next.setPosition(650, 500);
         next.setVisible(false);
-        next.setPosition(750,550);
+        next.setPosition(750,500);
 
 
 
@@ -133,18 +135,33 @@ public class PlayScreen implements Screen {
         attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
 
+        points = new Label("Points: " + Integer.toString(player.getPoints(1)), skin);
+        points.setFontScale((float) 0.5);
+        points.setPosition(400, 630);
+        points.setColor(Color.BLACK);
+
+        timeBonus = new Label("placeholder text", skin);
+        timeBonus.setFontScale((float) 0.5);
+        timeBonus.setPosition(600, 630);
+        timeBonus.setColor(Color.BLACK);
+        timeBonus.setVisible(false);
+
         instruction = new Label("solve for x", skin);
-        instruction.setPosition(450, 600);
+        instruction.setPosition(450, 550);
         instruction.setColor(Color.BLACK);
 
 
         nextLabel = new Label("press for next question", skin);
-        nextLabel.setPosition(400,550);
+        nextLabel.setPosition(400,500);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
 
+
+        dialog = new PlayDialog("", skin);
         stage.addActor(attempts);
+        stage.addActor(points);
+        stage.addActor(timeBonus);
         stage.addActor(nextLabel);
         stage.addActor(next);
         stage.addActor(instruction);
@@ -165,7 +182,7 @@ public class PlayScreen implements Screen {
         table.add(feedback).padBottom(10);
         table.row();
         table.add(equation);
-        table.setPosition(600, 500);
+        table.setPosition(600, 450);
 
         Table answersTable = new Table(skin);
         //answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
@@ -226,7 +243,6 @@ public class PlayScreen implements Screen {
                     System.out.println(target);
                     System.out.println(label.getText());
 
-                    System.out.println();
                     if (target != null) {
                         attemptsCount +=1;
                         incAttempts();
@@ -327,6 +343,10 @@ public class PlayScreen implements Screen {
                 timeCount = 0;
 
             }
+            else if (timer == 0) {
+                incWrongCount();
+                game.setScreen(new PlayScreen(game, player));
+            }
         }
     }
 
@@ -348,9 +368,21 @@ public class PlayScreen implements Screen {
 
     public void incCorrectCount() {
         player.incCorrectCount();
+        player.incPoints(1, timer);
+        points.setText("Points: " + Integer.toString(player.getPoints(1)));
+        timeBonus.setText("Time Bonus!!!: " + "+ " + timer);
+        timeBonus.setVisible(true);
+        if (player.getPoints(1) >= 200 && !player.getSection(2)) {
+            player.completeSection(1);
+            dialog.show(stage);
+
+        }
     }
 
     public void incWrongCount() {
         player.incWrongCount();
+        player.decPoints(1);
+        points.setText("Points: " + Integer.toString(player.getPoints(1)));
     }
+
 }

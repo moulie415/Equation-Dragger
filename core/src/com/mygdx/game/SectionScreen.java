@@ -74,12 +74,12 @@ public class SectionScreen implements Screen {
         section1.setPosition(100, 500);
         section2 = new TextButton("Section 2: Simultaneous Equations", sectionStyle);
         section2.setPosition(100, 400);
-        if (!player.getSection(2)) {
+        if (!player.getSection(1)) {
             section2.setColor(Color.GRAY);
         }
         section3 = new TextButton("Section 3: Quadratic Equations", sectionStyle);
         section3.setPosition(100, 300);
-        if (!player.getSection(3)) {
+        if (!player.getSection(2)) {
             section3.setColor(Color.GRAY);
         }
 
@@ -120,8 +120,8 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (player.getSection(2)) {
-
+                if (player.getSection(1)) {
+                    game.setScreen(new PlayScreen2(game, player));
                 }
                 else {
                     dialog.show(stage);
@@ -135,7 +135,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (player.getSection(3)) {
+                if (player.getSection(2)) {
 
                 }
                 else {

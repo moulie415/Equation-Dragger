@@ -1,15 +1,18 @@
 package com.mygdx.game;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static com.mygdx.game.Equation.randInt;
 
 /**
  * Created by henrymoule on 03/03/2017.
  */
 public class Simultaneous {
-    private float xMultplier1st;
-    private float xMultplier2nd;
-    private float yMultplier1st;
+    private float xMultiplier1st;
+    private float xMultiplier2nd;
+    private float yMultiplier1st;
     private float RHSNumber;
     private float x;
     private float y;
@@ -18,9 +21,9 @@ public class Simultaneous {
     public Simultaneous() {
 
         do {
-            xMultplier1st = randInt(2, 10);
-            yMultplier1st = randInt(2, 10);
-            xMultplier2nd = randInt(2, 10);
+            xMultiplier1st = randInt(2, 10);
+            yMultiplier1st = randInt(2, 10);
+            xMultiplier2nd = randInt(2, 10);
             RHSNumber = randInt(1, 10);
             int randomOperator = randInt(1, 2);
 
@@ -35,22 +38,41 @@ public class Simultaneous {
     }
     public void assignXandY() {
         if (operator.equals("+")) {
-            x = RHSNumber/(xMultplier1st + (yMultplier1st*xMultplier2nd));
+            x = RHSNumber/(xMultiplier1st + (yMultiplier1st * xMultiplier2nd));
         }
         else {
-            x = RHSNumber/(xMultplier1st-(yMultplier1st*xMultplier2nd));
+            x = RHSNumber/(xMultiplier1st -(yMultiplier1st * xMultiplier2nd));
         }
-        y = xMultplier2nd*x;
+        y = xMultiplier2nd *x;
     }
 
     public String firstToString() {
-        return Math.round(xMultplier1st) + "x " +  operator + " " + Math.round(yMultplier1st) + "y = " + Math.round(RHSNumber);
+        return Math.round(xMultiplier1st) + "x " +  operator + " " + Math.round(yMultiplier1st) + "y = " + Math.round(RHSNumber);
     }
 
     public String secondToString() {
-        return "y = " + Math.round(xMultplier2nd) + "x";
+        return "y = " + Math.round(xMultiplier2nd) + "x";
     }
 
+    public ArrayList<String> generateAnswers() {
+        ArrayList<String> answers= new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            int num;
+            do {
+                num = randInt(1, 10);
+                if (i % 2 != 0) {
+                    num = num*-1;
+                }
+            } while (num == getX() || num == getY() || answers.contains(Integer.toString(num)) );
+            answers.add(Integer.toString(num));
+        }
+        answers.add(Integer.toString(Math.round(getX())));
+        answers.add(Integer.toString(Math.round(getY())));
+
+        Collections.shuffle(answers);
+        return answers;
+
+    }
     public float getX() {
         return x;
     }

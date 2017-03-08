@@ -24,7 +24,7 @@ import java.io.IOException;
 
 
 /**
- * Created by henrymoule on 06/03/2016.
+ * Created by henrymoule on 31/12/2016.
  */
 public class PlayScreen2 implements Screen {
 
@@ -46,12 +46,15 @@ public class PlayScreen2 implements Screen {
     private Label nextLabel;
     private Label attempts;
     private Label instruction;
+    private Label points;
+    private Label timeBonus;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
+    private PlayDialog dialog;
 
     public PlayScreen2(Game game, Player player) {
         this.game = game;
@@ -91,9 +94,8 @@ public class PlayScreen2 implements Screen {
         nextStyle.up = crispy.getDrawable("button-arcade");
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
         next = new Button(nextStyle);
-        next.setPosition(650, 500);
         next.setVisible(false);
-        next.setPosition(750,550);
+        next.setPosition(750,500);
 
 
 
@@ -121,7 +123,7 @@ public class PlayScreen2 implements Screen {
 
         test.load(Gdx.files.internal("digital.json"));
 
-        timer = 20;
+        timer = 40;
 
         timerLabel = new Label("20", test);
         timerLabel.setColor(Color.BLUE);
@@ -133,30 +135,42 @@ public class PlayScreen2 implements Screen {
         attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
 
-        instruction = new Label("solve for x", skin);
-        instruction.setPosition(450, 600);
+        points = new Label("Points: " + Integer.toString(player.getPoints(2)), skin);
+        points.setFontScale((float) 0.5);
+        points.setPosition(400, 630);
+        points.setColor(Color.BLACK);
+
+        timeBonus = new Label("placeholder text", skin);
+        timeBonus.setFontScale((float) 0.5);
+        timeBonus.setPosition(600, 630);
+        timeBonus.setColor(Color.BLACK);
+        timeBonus.setVisible(false);
+
+        instruction = new Label("solve for x and y", skin);
+        instruction.setPosition(450, 550);
         instruction.setColor(Color.BLACK);
 
 
         nextLabel = new Label("press for next question", skin);
-        nextLabel.setPosition(400,550);
+        nextLabel.setPosition(400,500);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
 
+
+        dialog = new PlayDialog("", skin);
         stage.addActor(attempts);
+        stage.addActor(points);
+        stage.addActor(timeBonus);
         stage.addActor(nextLabel);
         stage.addActor(next);
         stage.addActor(instruction);
 
-        final Equation equation1 = new Equation();
+        final Simultaneous simul = new Simultaneous();
 
-        //final Label equation = new Label(equation1.equationString(), skin);
-        final TextButton equation = new TextButton(equation1.equationString(), equationStyle);
+        final TextButton equation1 = new TextButton(simul.firstToString(), equationStyle);
+        final TextButton equation2 = new TextButton(simul.secondToString(), equationStyle);
 
-
-        //Color myOrange = new Color(0xff6600ff);
-        // equation.setColor(new Color(0xffffffff));
 
         Table table = new Table();
 
@@ -164,16 +178,17 @@ public class PlayScreen2 implements Screen {
 
         table.add(feedback).padBottom(10);
         table.row();
-        table.add(equation);
-        table.setPosition(600, 500);
+        table.add(equation1).padRight(40);
+        table.add(equation2);
+        table.setPosition(600, 450);
 
         Table answersTable = new Table(skin);
         //answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
-        answersTable.setPosition(650, 300);
+        answersTable.setPosition(650, 200);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
-        dragAndDrop.addTarget(new Target(equation) {
+        dragAndDrop.addTarget(new Target(equation1) {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
@@ -193,14 +208,43 @@ public class PlayScreen2 implements Screen {
             }
         });
 
-        for (String answer : equation1.generateAnswers()) {
+
+        dragAndDrop.addTarget(new Target(equation2) {
+            @Override
+            public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+
+                getActor().setColor(Color.BLUE);
+
+                return true;
+            }
+
+
+            public void reset (DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                getActor().setColor(Color.WHITE);
+            }
+
+            @Override
+            public void drop(Source source, Payload payload, float x, float y, int pointer) {
+
+            }
+        });
+
+
+        int count = 0;
+        for (String answer : simul.generateAnswers()) {
             final TextButton label = new TextButton(answer, answerStyle);
 
             //label.setStyle();
 
             label.setSize(100, 100);
             label.setColor(Color.BLACK);
-            answersTable.add(label).padRight(50);
+            answersTable.add(label).pad(20);
+            if (count == 5) {
+                answersTable.row();
+
+            }
+
+            count++;
 
 
             dragAndDrop.addSource(new DragAndDrop.Source(label) {
@@ -223,11 +267,10 @@ public class PlayScreen2 implements Screen {
 
                 @Override
                 public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-                    System.out.println(target);
+                    System.out.println(target.getActor().toString());
                     System.out.println(label.getText());
 
-                    System.out.println();
-                    if (target != null) {
+/*                    if (target != null) {
                         attemptsCount +=1;
                         incAttempts();
                         attempts.setText("attempts: " + attemptsCount);
@@ -248,7 +291,7 @@ public class PlayScreen2 implements Screen {
                             incWrongCount();
                         }
 
-                    }
+                    }*/
                     label.setVisible(true);
                 }
             });
@@ -327,6 +370,10 @@ public class PlayScreen2 implements Screen {
                 timeCount = 0;
 
             }
+            else if (timer == 0) {
+                incWrongCount();
+                game.setScreen(new PlayScreen(game, player));
+            }
         }
     }
 
@@ -348,9 +395,21 @@ public class PlayScreen2 implements Screen {
 
     public void incCorrectCount() {
         player.incCorrectCount();
+        player.incPoints(1, timer);
+        points.setText("Points: " + Integer.toString(player.getPoints(1)));
+        timeBonus.setText("Time Bonus!!!: " + "+ " + timer);
+        timeBonus.setVisible(true);
+        if (player.getPoints(1) >= 200 && !player.getSection(2)) {
+            player.completeSection(1);
+            dialog.show(stage);
+
+        }
     }
 
     public void incWrongCount() {
         player.incWrongCount();
+        player.decPoints(1);
+        points.setText("Points: " + Integer.toString(player.getPoints(1)));
     }
+
 }
