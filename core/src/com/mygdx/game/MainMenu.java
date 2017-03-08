@@ -88,10 +88,6 @@ public class MainMenu implements Screen {
         about = new TextButton("ABOUT", buttonStyle);
         about.setSize(350,100);
 
-        System.out.println(stage.getWidth());
-        System.out.println(stage.getHeight());
-        System.out.println(Gdx.graphics.getWidth());
-        System.out.println(Gdx.graphics.getHeight());
         start.setPosition(500, 550 );
         tutorial.setPosition(500, 400);
         stats.setPosition(500, 250);

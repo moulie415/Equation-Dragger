@@ -243,7 +243,6 @@ public class PlayScreen implements Screen {
                     System.out.println(target);
                     System.out.println(label.getText());
 
-                    System.out.println();
                     if (target != null) {
                         attemptsCount +=1;
                         incAttempts();

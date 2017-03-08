@@ -4,7 +4,6 @@ package com.mygdx.game;
 
 
 /*
-TODO game ideas: work out algebra equation: drag and drop with timer (time bomb that ticks down)
 TODO add music/sounds
 TODO elements to implement, points,badges, stats and leaderboards (if possible)
 TODO implement simultaneous and quadratic equation sections
@@ -24,11 +23,6 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void create ()  {
-		Simultaneous test = new Simultaneous();
-		System.out.println(test.firstToString());
-		System.out.println(test.secondToString());
-		System.out.println("x = " + test.getX());
-		System.out.println("y = " + test.getY());
 		game = this;
 		if (Gdx.files.local("player.dat").exists()) {
 			try {
@@ -41,9 +35,6 @@ public class MyGdxGame extends Game {
 				e.printStackTrace();
 			}
 			System.out.println("Player Exits, Reading File");
-			System.out.println(player.getAttempts());
-			System.out.println(player.getCorrectCount());
-			System.out.println(player.getWrongCount());
 		}
 		else {
 			player = new Player();
