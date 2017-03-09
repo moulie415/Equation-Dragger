@@ -16,6 +16,7 @@ public class Quadratic {
     private double answer2;
     private String operator1;
     private String operator2;
+    private boolean onlyOneRoot = false;
 
 
     public Quadratic() {
@@ -41,6 +42,10 @@ public class Quadratic {
             solve();
         } while (answer1 % 1 != 0 || answer2 % 1 != 0);
 
+        if (answer1 == answer2) {
+            onlyOneRoot = true;
+        }
+
         System.out.println(toString());
         System.out.println(answer1);
         System.out.println(answer2);
@@ -48,6 +53,7 @@ public class Quadratic {
     }
     public void solve() {
         double b = coefficientB;
+
         if (operator1.equals("-")) {
             b *= -1;
 
@@ -57,35 +63,37 @@ public class Quadratic {
             c *= -1;
 
         }
-        answer1 = (-1*(b)+Math.sqrt((Math.pow(b, 2)-4*coefficientA*c)))/2*coefficientA;
-        answer2 = (-1*(b)-Math.sqrt((Math.pow(b, 2)-4*coefficientA*c)))/2*coefficientA;
+        double d = b*b - 4 * coefficientA * c;
+        answer1 = (- b + Math.sqrt(d))/(2*coefficientA);
+        answer2 = (- b - Math.sqrt(d))/(2*coefficientA);
 
     }
 
     public String toString() {
         String part1;
         String part2;
+        String part3 = Integer.toString((int)Math.round(coefficientC));
 
         if (coefficientA == 1) {
-            part1 = "x²";
+            part1 = "x² ";
 
         }
         else {
-            part1 = Double.toString(coefficientA) + "x² ";
+            part1 = Integer.toString((int)Math.round(coefficientA)) + "x² ";
         }
 
         if (coefficientB == 1) {
             part2 = " x ";
         }
         else {
-            part2 = " " + Double.toString(coefficientB) + "x ";
+            part2 = " " + Integer.toString((int)Math.round(coefficientB)) + "x ";
         }
 
-        return part1 + operator1 + part2 + operator2 + " " + coefficientC + " = 0";
+        return part1 + operator1 + part2 + operator2 + " " + part3 + " = 0";
     }
 
 
-/*    public ArrayList<String> generateAnswers() {
+    public ArrayList<String> generateAnswers() {
         ArrayList<String> answers= new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
             int num;
@@ -94,14 +102,17 @@ public class Quadratic {
                 if (i % 2 != 0) {
                     num = num*-1;
                 }
-            } while (num == getX() || num == getY() || answers.contains(Integer.toString(num)) );
+            } while (num == answer1 || num == answer2 || answers.contains(Integer.toString(num)) );
             answers.add(Integer.toString(num));
         }
-        answers.add(Integer.toString(Math.round(getX())));
-        answers.add(Integer.toString(Math.round(getY())));
+        answers.add(Integer.toString((int)Math.round(answer1)));
+        answers.add(Integer.toString((int)Math.round(answer2)));
 
         Collections.shuffle(answers);
         return answers;
 
-    }*/
+    }
+    public boolean getOnlyOneRoot() {
+        return onlyOneRoot;
+    }
 }
