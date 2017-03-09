@@ -24,6 +24,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create ()  {
 		game = this;
+		Quadratic test = new Quadratic();
 		if (Gdx.files.local("player.dat").exists()) {
 			try {
 				player = Player.readPlayer();

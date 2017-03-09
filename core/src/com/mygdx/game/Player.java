@@ -89,11 +89,11 @@ public class Player implements Serializable {
                     section1Points += timeBonus;
                     break;
                 case 2:
-                    section2Points += 10;
+                    section2Points += 20;
                     section2Points += timeBonus;
                     break;
                 case 3:
-                    section3Points += 10;
+                    section3Points += 20;
                     section3Points += timeBonus;
                 default:
                     System.out.println("Invalid section number");

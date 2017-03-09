@@ -104,7 +104,6 @@ public class PlayScreen2 implements Screen {
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
         next = new Button(nextStyle);
         next.setVisible(false);
-        next.setPosition(750,500);
 
 
 
@@ -161,7 +160,6 @@ public class PlayScreen2 implements Screen {
 
 
         nextLabel = new Label("press for next question", skin);
-        nextLabel.setPosition(400,500);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
@@ -171,7 +169,6 @@ public class PlayScreen2 implements Screen {
         stage.addActor(attempts);
         stage.addActor(points);
         stage.addActor(timeBonus);
-        stage.addActor(nextLabel);
         stage.addActor(next);
         stage.addActor(instruction);
 
@@ -194,17 +191,19 @@ public class PlayScreen2 implements Screen {
 
         feedback = new Label("", skin);
 
-        table.add(feedback).padBottom(10);
+        table.add(feedback);
+        table.add(nextLabel);
+        table.add(next);
         table.row();
-        table.add(equation1).padRight(40).padBottom(20);
+        table.add(equation1).padBottom(20);
         table.add(equation2).padBottom(20);
         table.row();
-        table.add(x).padRight(40);
+        table.add(x).padLeft(100);
         table.add(y);
-        table.setPosition(600, 450);
+        table.setPosition(600, 400);
 
         Table answersTable = new Table(skin);
-        answersTable.setPosition(650, 200);
+        answersTable.setPosition(650, 150);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
@@ -497,7 +496,7 @@ public class PlayScreen2 implements Screen {
         points.setText("Points: " + Integer.toString(player.getPoints(2)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(2) >= 200 && !player.getSection(3)) {
+        if (player.getPoints(2) >= 300 && !player.getSection(3)) {
             player.completeSection(2);
             dialog.show(stage);
 
