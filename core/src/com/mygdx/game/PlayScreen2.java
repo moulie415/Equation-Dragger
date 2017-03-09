@@ -48,13 +48,22 @@ public class PlayScreen2 implements Screen {
     private Label instruction;
     private Label points;
     private Label timeBonus;
+    private Label equation1;
+    private Label equation2;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
+    private boolean isXCorrect = false;
+    private boolean isYCorrect = false;
+
+
     private PlayDialog dialog;
+    private boolean isXSet = false;
+    private boolean isYSet = false;
+
 
     public PlayScreen2(Game game, Player player) {
         this.game = game;
@@ -167,9 +176,18 @@ public class PlayScreen2 implements Screen {
         stage.addActor(instruction);
 
         final Simultaneous simul = new Simultaneous();
+        System.out.println(simul.getX());
+        System.out.println(simul.getY());
 
-        final TextButton equation1 = new TextButton(simul.firstToString(), equationStyle);
-        final TextButton equation2 = new TextButton(simul.secondToString(), equationStyle);
+
+        equation1 = new Label(simul.firstToString(), skin);
+        equation2 = new Label(simul.secondToString(), skin);
+        equation1.setColor(Color.BLACK);
+        equation2.setColor(Color.BLACK);
+
+        final TextButton x = new TextButton("x = ", equationStyle);
+        final TextButton y = new TextButton("y = ", equationStyle);
+
 
 
         Table table = new Table();
@@ -178,17 +196,19 @@ public class PlayScreen2 implements Screen {
 
         table.add(feedback).padBottom(10);
         table.row();
-        table.add(equation1).padRight(40);
-        table.add(equation2);
+        table.add(equation1).padRight(40).padBottom(20);
+        table.add(equation2).padBottom(20);
+        table.row();
+        table.add(x).padRight(40);
+        table.add(y);
         table.setPosition(600, 450);
 
         Table answersTable = new Table(skin);
-        //answersTable.setPosition(equation.getWidth()*2  , Gdx.graphics.getHeight()/2 - equation.getHeight());
         answersTable.setPosition(650, 200);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
-        dragAndDrop.addTarget(new Target(equation1) {
+        dragAndDrop.addTarget(new Target(x) {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
@@ -209,7 +229,7 @@ public class PlayScreen2 implements Screen {
         });
 
 
-        dragAndDrop.addTarget(new Target(equation2) {
+        dragAndDrop.addTarget(new Target(y) {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
@@ -255,7 +275,7 @@ public class PlayScreen2 implements Screen {
                     label.setVisible(false);
                     payload.setObject(label);
                     //System.out.println(label.getText());
-                    //if (label.getText().toString().equals(equation1.solveEquation())) {
+                    //if (label.getText().toString().equals(x.solveEquation())) {
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
                     draggedLabel.setColor(Color.BLACK);
@@ -266,32 +286,110 @@ public class PlayScreen2 implements Screen {
                 }
 
                 @Override
-                public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-                    System.out.println(target.getActor().toString());
-                    System.out.println(label.getText());
+                public void dragStop(InputEvent event, float xaxis, float yaxis, int pointer, Payload payload, Target target) {
 
-/*                    if (target != null) {
-                        attemptsCount +=1;
-                        incAttempts();
-                        attempts.setText("attempts: " + attemptsCount);
-                        if (label.getText().toString().equals(equation1.solveEquation())) {
-                            System.out.println("correct");
-                            feedback.setColor(Color.GREEN);
-                            feedback.setText("correct!");
-                            dragAndDrop.clear();
-                            isCorrect = true;
-                            next.setVisible(true);
-                            nextLabel.setVisible(true);
-                            incCorrectCount();
+                    if (target != null) {
+                        if (target.getActor().equals(x)) {
+                            x.setText("x = " + label.getText());
+                            setIsXSet(true);
+                            if (Float.valueOf(label.getText().toString()) == (simul.getX())) {
+                                System.out.printf("x is correct");
+                                setXCorrect(true);
+                                if (getIsYSet()) {
+                                    attemptsCount +=1;
+                                    incAttempts();
+                                    attempts.setText("attempts: " + attemptsCount);
+                                    if (isYCorrect()) {
+                                        System.out.println("correct");
+                                        feedback.setColor(Color.GREEN);
+                                        feedback.setText("correct!");
+                                        dragAndDrop.clear();
+                                        isCorrect = true;
+                                        next.setVisible(true);
+                                        nextLabel.setVisible(true);
+                                        incCorrectCount();
+
+                                    }
+                                    else {
+                                        System.out.println("false");
+                                        feedback.setColor(Color.RED);
+                                        feedback.setText("wrong, try again");
+                                        incWrongCount();
+                                        x.setText("x = ");
+                                        y.setText("y = ");
+                                        resetXandY();
+
+
+                                    }
+                                }
+                            }
+                            else {
+                                setXCorrect(false);
+                                if (getIsYSet()) {
+                                    System.out.println("false");
+                                    feedback.setColor(Color.RED);
+                                    feedback.setText("wrong, try again");
+                                    incWrongCount();
+                                    x.setText("x = ");
+                                    y.setText("y = ");
+                                    resetXandY();
+
+                                }
+                            }
+
+                            System.out.println("x");
 
                         } else {
-                            System.out.println("false");
-                            feedback.setColor(Color.RED);
-                            feedback.setText("wrong, try again");
-                            incWrongCount();
+                            System.out.println("y");
+                            y.setText("y = " + label.getText());
+                            setIsYSet(true);
+                            if (Float.valueOf(label.getText().toString()) == (simul.getY())) {
+                                System.out.printf("y is correct");
+                                setYCorrect(true);
+                                if (getIsXSet()) {
+                                    attemptsCount +=1;
+                                    incAttempts();
+                                    attempts.setText("attempts: " + attemptsCount);
+                                    if (isXCorrect()) {
+                                        System.out.println("correct");
+                                        feedback.setColor(Color.GREEN);
+                                        feedback.setText("correct!");
+                                        dragAndDrop.clear();
+                                        isCorrect = true;
+                                        next.setVisible(true);
+                                        nextLabel.setVisible(true);
+                                        incCorrectCount();
+
+                                    }
+                                    else {
+                                        System.out.println("false");
+                                        feedback.setColor(Color.RED);
+                                        feedback.setText("wrong, try again");
+                                        incWrongCount();
+                                        x.setText("x = ");
+                                        y.setText("y = ");
+                                        resetXandY();
+
+
+                                    }
+                                }
+                            }
+                            else {
+                                setYCorrect(false);
+                                if (getIsXSet()) {
+                                    System.out.println("false");
+                                    feedback.setColor(Color.RED);
+                                    feedback.setText("wrong, try again");
+                                    incWrongCount();
+                                    x.setText("x = ");
+                                    y.setText("y = ");
+                                    resetXandY();
+
+                                }
+                            }
                         }
 
-                    }*/
+                    }
                     label.setVisible(true);
                 }
             });
@@ -324,7 +422,7 @@ public class PlayScreen2 implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("clicked");
 
-                game.setScreen(new PlayScreen(game, player));
+                game.setScreen(new PlayScreen2(game, player));
 
                 return true;
             }
@@ -395,12 +493,12 @@ public class PlayScreen2 implements Screen {
 
     public void incCorrectCount() {
         player.incCorrectCount();
-        player.incPoints(1, timer);
-        points.setText("Points: " + Integer.toString(player.getPoints(1)));
-        timeBonus.setText("Time Bonus!!!: " + "+ " + timer);
+        player.incPoints(2, timer);
+        points.setText("Points: " + Integer.toString(player.getPoints(2)));
+        timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(1) >= 200 && !player.getSection(2)) {
-            player.completeSection(1);
+        if (player.getPoints(2) >= 200 && !player.getSection(3)) {
+            player.completeSection(2);
             dialog.show(stage);
 
         }
@@ -408,8 +506,46 @@ public class PlayScreen2 implements Screen {
 
     public void incWrongCount() {
         player.incWrongCount();
-        player.decPoints(1);
-        points.setText("Points: " + Integer.toString(player.getPoints(1)));
+        player.decPoints(2);
+        points.setText("Points: " + Integer.toString(player.getPoints(2)));
     }
 
+    public void setIsXSet(boolean isSet) {
+        isXSet = isSet;
+    }
+    public void setIsYSet(boolean isSet) {
+        isYSet = isSet;
+    }
+
+    public boolean getIsXSet() {
+        return isXSet;
+    }
+
+    public boolean getIsYSet() {
+        return isYSet;
+    }
+
+    public boolean isXCorrect() {
+        return isXCorrect;
+    }
+
+    public void setXCorrect(boolean XCorrect) {
+        isXCorrect = XCorrect;
+    }
+
+    public boolean isYCorrect() {
+        return isYCorrect;
+    }
+
+    public void setYCorrect(boolean YCorrect) {
+        isYCorrect = YCorrect;
+    }
+
+    public void resetXandY(){
+        isXSet = false;
+        isYSet = false;
+        isXCorrect = false;
+        isYCorrect = false;
+
+    }
 }

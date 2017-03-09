@@ -370,7 +370,7 @@ public class PlayScreen implements Screen {
         player.incCorrectCount();
         player.incPoints(1, timer);
         points.setText("Points: " + Integer.toString(player.getPoints(1)));
-        timeBonus.setText("Time Bonus!!!: " + "+ " + timer);
+        timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
         if (player.getPoints(1) >= 200 && !player.getSection(2)) {
             player.completeSection(1);
