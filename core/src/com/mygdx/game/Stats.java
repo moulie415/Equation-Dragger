@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -37,11 +38,12 @@ public class Stats implements Screen {
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
+    private Sound click;
 
     public Stats(Game game, Player player) {
         this.game = game;
         this.player = player;
-
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
 
     }
     @Override
@@ -106,6 +108,7 @@ public class Stats implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
+                click.play();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }

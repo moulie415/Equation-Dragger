@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
@@ -27,9 +28,7 @@ import java.io.IOException;
 public class MainMenu implements Screen {
 
     private Stage stage;
-    private Label.LabelStyle style;
     private BitmapFont font;
-    private BitmapFont font2;
     private TextureAtlas buttonAtlas;
     private TextButton.TextButtonStyle buttonStyle;
 
@@ -43,10 +42,12 @@ public class MainMenu implements Screen {
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
+    private Sound click;
 
     public MainMenu(Game game, Player player ) {
         this.game = game;
         this.player = player;
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
     }
 
     @Override
@@ -60,8 +61,6 @@ public class MainMenu implements Screen {
 
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        font2 = new BitmapFont();
-        style = new Label.LabelStyle(font, Color.BLACK);
 
 
         skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
@@ -102,6 +101,7 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 game.setScreen(new SectionScreen(game, player));
 
 
@@ -113,7 +113,7 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
+                click.play();
                 game.setScreen(new TestClass(game));
 
                 return true;
@@ -124,6 +124,7 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
 
                 game.setScreen(new About(game));
 
@@ -136,6 +137,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
+                click.play();
                 game.setScreen(new Stats(game, player));
 
                 return true;
@@ -162,7 +164,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -178,6 +179,7 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        click.dispose();
 
         try {
             player.savePlayer(player);

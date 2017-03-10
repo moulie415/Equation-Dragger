@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,10 +34,13 @@ public class SectionScreen implements Screen {
     private TextButton.TextButtonStyle sectionStyle;
     private Button.ButtonStyle buttonStyle;
     private Skin skin;
+    private Sound click;
 
     public SectionScreen(Game game, Player player) {
         this.game = game;
         this.player = player;
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
 
@@ -102,6 +106,7 @@ public class SectionScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
+                click.play();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -111,6 +116,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 game.setScreen(new PlayScreen(game, player));
                 return true;
             }
@@ -120,6 +126,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 if (player.getSection(1)) {
                     game.setScreen(new PlayScreen2(game, player));
                 }
@@ -135,6 +142,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 if (player.getSection(2)) {
                     game.setScreen(new PlayScreen3(game, player));
                 }
@@ -168,6 +176,7 @@ public class SectionScreen implements Screen {
 
     @Override
     public void pause() {
+        Gdx.app.exit();
 
     }
 
@@ -184,6 +193,7 @@ public class SectionScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        click.dispose();
 
     }
 

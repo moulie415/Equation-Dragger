@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -35,7 +36,8 @@ public class PlayScreen2 implements Screen {
     private float timeCount;
     private int timer;
     private Label timerLabel;
-    private Label feedback;
+    private Label feedbackWrong;
+    private Label feedbackCorrect;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
@@ -56,16 +58,20 @@ public class PlayScreen2 implements Screen {
     private Boolean isCorrect;
     private boolean isXCorrect = false;
     private boolean isYCorrect = false;
-
-
     private PlayDialog dialog;
     private boolean isXSet = false;
     private boolean isYSet = false;
+    private Sound click;
+    private Sound correct;
+    private Sound wrong;
 
 
     public PlayScreen2(Game game, Player player) {
         this.game = game;
         this.player = player;
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
+        wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -187,21 +193,30 @@ public class PlayScreen2 implements Screen {
 
         Table table = new Table();
 
-        feedback = new Label("", skin);
 
-        table.add(feedback);
-        table.add(nextLabel);
-        table.add(next);
-        table.row();
-        table.add(equation1).padLeft(200).padBottom(20);
+        feedbackCorrect = new Label("correct", skin);
+        feedbackCorrect.setVisible(false);
+        feedbackCorrect.setColor(Color.GREEN);
+        feedbackWrong = new Label("wrong, try again", skin);
+        feedbackWrong.setVisible(false);
+        feedbackWrong.setColor(Color.RED);
+        feedbackCorrect.setPosition(450, 480);
+        feedbackWrong.setPosition(450, 480);
+        nextLabel.setPosition(675, 480);
+        nextLabel.setWidth(200);
+        next.setPosition(1000, 470);
+
+
+
+        table.add(equation1).padBottom(20);
         table.add(equation2).padBottom(20);
         table.row();
-        table.add(x).padLeft(100);
-        table.add(y);
+        table.add(x);
+        table.add(y).padLeft(40);
         table.setPosition(600, 400);
 
         Table answersTable = new Table(skin);
-        answersTable.setPosition(650, 150);
+        answersTable.setPosition(600, 150);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
@@ -290,16 +305,16 @@ public class PlayScreen2 implements Screen {
                             x.setText("x = " + label.getText());
                             setIsXSet();
                             if (Float.valueOf(label.getText().toString()) == (simul.getX())) {
-                                System.out.printf("x is correct");
                                 setXCorrect(true);
                                 if (getIsYSet()) {
                                     attemptsCount +=1;
                                     incAttempts();
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isYCorrect()) {
+                                        correct.play();
                                         System.out.println("correct");
-                                        feedback.setColor(Color.GREEN);
-                                        feedback.setText("correct!");
+                                        feedbackWrong.setVisible(false);
+                                        feedbackCorrect.setVisible(true);
                                         dragAndDrop.clear();
                                         isCorrect = true;
                                         next.setVisible(true);
@@ -308,9 +323,9 @@ public class PlayScreen2 implements Screen {
 
                                     }
                                     else {
+                                        wrong.play();
                                         System.out.println("false");
-                                        feedback.setColor(Color.RED);
-                                        feedback.setText("wrong, try again");
+                                        feedbackWrong.setVisible(true);
                                         incWrongCount();
                                         x.setText("x = ");
                                         y.setText("y = ");
@@ -323,9 +338,9 @@ public class PlayScreen2 implements Screen {
                             else {
                                 setXCorrect(false);
                                 if (getIsYSet()) {
+                                    wrong.play();
                                     System.out.println("false");
-                                    feedback.setColor(Color.RED);
-                                    feedback.setText("wrong, try again");
+                                    feedbackWrong.setVisible(true);
                                     incWrongCount();
                                     x.setText("x = ");
                                     y.setText("y = ");
@@ -341,16 +356,16 @@ public class PlayScreen2 implements Screen {
                             y.setText("x = " + label.getText());
                             setIsYSet();
                             if (Float.valueOf(label.getText().toString()) == (simul.getY())) {
-                                System.out.printf("y is correct");
                                 setYCorrect(true);
                                 if (getIsXSet()) {
                                     attemptsCount +=1;
                                     incAttempts();
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isXCorrect()) {
+                                        correct.play();
                                         System.out.println("correct");
-                                        feedback.setColor(Color.GREEN);
-                                        feedback.setText("correct!");
+                                        feedbackWrong.setVisible(false);
+                                        feedbackCorrect.setVisible(true);
                                         dragAndDrop.clear();
                                         isCorrect = true;
                                         next.setVisible(true);
@@ -359,9 +374,9 @@ public class PlayScreen2 implements Screen {
 
                                     }
                                     else {
+                                        wrong.play();
                                         System.out.println("false");
-                                        feedback.setColor(Color.RED);
-                                        feedback.setText("wrong, try again");
+                                        feedbackWrong.setVisible(true);
                                         incWrongCount();
                                         x.setText("x = ");
                                         y.setText("y = ");
@@ -374,9 +389,9 @@ public class PlayScreen2 implements Screen {
                             else {
                                 setYCorrect(false);
                                 if (getIsXSet()) {
+                                    wrong.play();
                                     System.out.println("false");
-                                    feedback.setColor(Color.RED);
-                                    feedback.setText("wrong, try again");
+                                    feedbackWrong.setVisible(true);
                                     incWrongCount();
                                     x.setText("x = ");
                                     y.setText("y = ");
@@ -397,6 +412,10 @@ public class PlayScreen2 implements Screen {
         stage.addActor(table);
 
         stage.addActor(answersTable);
+        stage.addActor(feedbackCorrect);
+        stage.addActor(feedbackWrong);
+        stage.addActor(nextLabel);
+        stage.addActor(next);
 
     }
 
@@ -407,6 +426,7 @@ public class PlayScreen2 implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
@@ -417,6 +437,7 @@ public class PlayScreen2 implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 System.out.println("clicked");
 
                 game.setScreen(new PlayScreen2(game, player));
@@ -475,6 +496,9 @@ public class PlayScreen2 implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        click.dispose();
+        correct.dispose();
+        wrong.dispose();
         try {
             player.savePlayer(player);
         }

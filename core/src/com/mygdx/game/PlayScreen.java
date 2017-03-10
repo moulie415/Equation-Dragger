@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,13 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -55,11 +54,17 @@ public class PlayScreen implements Screen {
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
     private PlayDialog dialog;
+    private Sound click;
+    private Sound correct;
+    private Sound wrong;
 
     public PlayScreen(Game game, Player player) {
         this.game = game;
         this.player = player;
 
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
+        wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
 
@@ -248,6 +253,7 @@ public class PlayScreen implements Screen {
                         incAttempts();
                         attempts.setText("attempts: " + attemptsCount);
                         if (label.getText().toString().equals(equation1.solveEquation())) {
+                            correct.play();
                             System.out.println("correct");
                             feedback.setColor(Color.GREEN);
                             feedback.setText("correct!");
@@ -258,6 +264,7 @@ public class PlayScreen implements Screen {
                             incCorrectCount();
 
                         } else {
+                            wrong.play();
                             System.out.println("false");
                             feedback.setColor(Color.RED);
                             feedback.setText("wrong, try again");
@@ -285,6 +292,7 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
@@ -295,6 +303,7 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
                 System.out.println("clicked");
 
                 game.setScreen(new PlayScreen(game, player));
@@ -353,6 +362,9 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        click.dispose();
+        wrong.dispose();
+        correct.dispose();
         try {
             player.savePlayer(player);
         }

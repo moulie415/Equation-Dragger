@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -9,9 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class SectionDialog extends Dialog {
+    private Sound click;
 
     public SectionDialog(String title, Skin skin) {
         super(title, skin);
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
     }
 
     public SectionDialog(String title, Skin skin, String windowStyleName) {
@@ -31,6 +35,7 @@ public class SectionDialog extends Dialog {
 
     @Override
     protected void result(Object object) {
+        click.play();
     }
 
 
