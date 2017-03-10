@@ -6,7 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,25 +20,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 /**
  * Created by henrymoule on 06/03/2017.
  */
-public class SectionScreen implements Screen {
+public class Tutorial implements Screen {
     private Stage stage;
-    private Player player;
     private Game game;
+    private Player player;
     private Skin crispy;
-    private BitmapFont font;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Button close;
-    private TextButton section1;
-    private TextButton section2;
-    private TextButton section3;
-    private TextButton.TextButtonStyle sectionStyle;
+    private Texture image;
+    private TextureRegion region;
     private Button.ButtonStyle buttonStyle;
-    private Skin skin;
     private Sound click;
 
-    public SectionScreen(Game game, Player player) {
+    public Tutorial(Game game, Player player) {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
@@ -49,10 +47,7 @@ public class SectionScreen implements Screen {
         stage = new Stage(viewport);
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
-        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        font.setColor(Color.BLACK);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -60,11 +55,6 @@ public class SectionScreen implements Screen {
         buttonStyle.down = crispy.getDrawable("button-close-pressed");
 
 
-        sectionStyle = new TextButton.TextButtonStyle();
-        sectionStyle.up = crispy.getDrawable("button");
-        sectionStyle.over = crispy.getDrawable("button-over");
-        sectionStyle.down = crispy.getDrawable("button-pressed");
-        sectionStyle.font = font;
 
         close = new Button(buttonStyle);
 
@@ -74,24 +64,8 @@ public class SectionScreen implements Screen {
 
         close.setPosition(50, 650);
 
-        section1 = new TextButton("Section 1: Simple Equations", sectionStyle);
-        section1.setPosition(100, 500);
-        section2 = new TextButton("Section 2: Simultaneous Equations", sectionStyle);
-        section2.setPosition(100, 400);
-        if (!player.getSection(1)) {
-            section2.setColor(Color.GRAY);
-        }
-        section3 = new TextButton("Section 3: Quadratic Equations", sectionStyle);
-        section3.setPosition(100, 300);
-        if (!player.getSection(2)) {
-            section3.setColor(Color.GRAY);
-        }
-
-        stage.addActor(section1);
-        stage.addActor(section2);
-        stage.addActor(section3);
-
-
+        image = new Texture(Gdx.files.internal("images/tutorial.png"));
+        region = new TextureRegion(image);
     }
 
 
@@ -100,7 +74,6 @@ public class SectionScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
 
-        final SectionDialog dialog = new SectionDialog("", skin);
         close.addListener(new InputListener(){
 
             @Override
@@ -108,48 +81,6 @@ public class SectionScreen implements Screen {
                 System.out.println("closed");
                 click.play();
                 game.setScreen(new MainMenu(game, player));
-                return true;
-            }
-
-        });
-        section1.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
-                game.setScreen(new PlayScreen(game, player));
-                return true;
-            }
-
-        });
-        section2.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
-                if (player.getSection(1)) {
-                    game.setScreen(new PlayScreen2(game, player));
-                }
-                else {
-                    dialog.show(stage);
-
-                }
-                return true;
-            }
-
-        });
-        section3.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
-                if (player.getSection(2)) {
-                    game.setScreen(new PlayScreen3(game, player));
-                }
-                else {
-                    dialog.show(stage);
-
-                }
                 return true;
             }
 
@@ -164,6 +95,9 @@ public class SectionScreen implements Screen {
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().begin();
+        stage.getBatch().draw(image, 100, 100);
+        stage.getBatch().end();
         stage.draw();
 
     }
@@ -197,3 +131,4 @@ public class SectionScreen implements Screen {
     }
 
 }
+

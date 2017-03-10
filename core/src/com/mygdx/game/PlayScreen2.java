@@ -64,6 +64,8 @@ public class PlayScreen2 implements Screen {
     private Sound click;
     private Sound correct;
     private Sound wrong;
+    private Sound countdown;
+    private boolean isPlaying = false;
 
 
     public PlayScreen2(Game game, Player player) {
@@ -72,6 +74,7 @@ public class PlayScreen2 implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
+        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/countdown.wav"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -137,7 +140,7 @@ public class PlayScreen2 implements Screen {
 
         timer = 40;
 
-        timerLabel = new Label("20", test);
+        timerLabel = new Label("40", test);
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
@@ -209,7 +212,7 @@ public class PlayScreen2 implements Screen {
 
 
         table.add(equation1).padBottom(20);
-        table.add(equation2).padBottom(20);
+        table.add(equation2).padBottom(20).padLeft(100);
         table.row();
         table.add(x);
         table.add(y).padLeft(40);
@@ -353,7 +356,7 @@ public class PlayScreen2 implements Screen {
 
                         } else {
                             System.out.println("y");
-                            y.setText("x = " + label.getText());
+                            y.setText("y = " + label.getText());
                             setIsYSet();
                             if (Float.valueOf(label.getText().toString()) == (simul.getY())) {
                                 setYCorrect(true);
@@ -427,6 +430,7 @@ public class PlayScreen2 implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                countdown.dispose();
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
@@ -488,7 +492,12 @@ public class PlayScreen2 implements Screen {
             }
             else if (timer == 0) {
                 incWrongCount();
+                wrong.play();
                 game.setScreen(new PlayScreen2(game, player));
+            }
+            if (timer == 10 && !isPlaying) {
+                isPlaying = true;
+                countdown.play();
             }
         }
     }
@@ -499,6 +508,7 @@ public class PlayScreen2 implements Screen {
         click.dispose();
         correct.dispose();
         wrong.dispose();
+        countdown.dispose();
         try {
             player.savePlayer(player);
         }

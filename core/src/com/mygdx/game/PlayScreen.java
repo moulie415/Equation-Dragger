@@ -57,6 +57,8 @@ public class PlayScreen implements Screen {
     private Sound click;
     private Sound correct;
     private Sound wrong;
+    private Sound countdown;
+    private boolean isPlaying = false;
 
     public PlayScreen(Game game, Player player) {
         this.game = game;
@@ -65,6 +67,7 @@ public class PlayScreen implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
+        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/countdown.wav"));
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
 
@@ -293,6 +296,7 @@ public class PlayScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                countdown.dispose();
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
@@ -354,7 +358,12 @@ public class PlayScreen implements Screen {
             }
             else if (timer == 0) {
                 incWrongCount();
+                wrong.play();
                 game.setScreen(new PlayScreen(game, player));
+            }
+            if (timer == 10 && !isPlaying) {
+                isPlaying = true;
+                countdown.play();
             }
         }
     }
@@ -364,6 +373,7 @@ public class PlayScreen implements Screen {
         stage.dispose();
         click.dispose();
         wrong.dispose();
+        countdown.dispose();
         correct.dispose();
         try {
             player.savePlayer(player);
