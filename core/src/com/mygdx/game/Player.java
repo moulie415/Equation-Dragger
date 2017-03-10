@@ -95,6 +95,7 @@ public class Player implements Serializable {
                 case 3:
                     section3Points += 20;
                     section3Points += timeBonus;
+                    break;
                 default:
                     System.out.println("Invalid section number");
             }
@@ -126,6 +127,7 @@ public class Player implements Serializable {
                 else {
                     section3Points -=5;
                 }
+                break;
             default:
                 System.out.println("Invalid section number");
         }

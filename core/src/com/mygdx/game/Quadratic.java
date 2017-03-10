@@ -46,10 +46,6 @@ public class Quadratic {
             onlyOneRoot = true;
         }
 
-        System.out.println(toString());
-        System.out.println(answer1);
-        System.out.println(answer2);
-
     }
     public void solve() {
         double b = coefficientB;
@@ -75,11 +71,11 @@ public class Quadratic {
         String part3 = Integer.toString((int)Math.round(coefficientC));
 
         if (coefficientA == 1) {
-            part1 = "x² ";
+            part1 = "x\u00B2 ";
 
         }
         else {
-            part1 = Integer.toString((int)Math.round(coefficientA)) + "x² ";
+            part1 = Integer.toString((int)Math.round(coefficientA)) + "x\u00B2 ";
         }
 
         if (coefficientB == 1) {
@@ -106,7 +102,9 @@ public class Quadratic {
             answers.add(Integer.toString(num));
         }
         answers.add(Integer.toString((int)Math.round(answer1)));
-        answers.add(Integer.toString((int)Math.round(answer2)));
+        if (!onlyOneRoot) {
+            answers.add(Integer.toString((int) Math.round(answer2)));
+        }
 
         Collections.shuffle(answers);
         return answers;
@@ -114,5 +112,12 @@ public class Quadratic {
     }
     public boolean getOnlyOneRoot() {
         return onlyOneRoot;
+    }
+
+    public double getAnswer1() {
+        return  answer1;
+    }
+    public double getAnswer2() {
+        return  answer2;
     }
 }

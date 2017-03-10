@@ -136,7 +136,7 @@ public class SectionScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (player.getSection(2)) {
-
+                    game.setScreen(new PlayScreen3(game, player));
                 }
                 else {
                     dialog.show(stage);

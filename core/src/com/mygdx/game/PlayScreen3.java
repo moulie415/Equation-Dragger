@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -26,7 +24,7 @@ import java.io.IOException;
 /**
  * Created by henrymoule on 31/12/2016.
  */
-public class PlayScreen2 implements Screen {
+public class PlayScreen3 implements Screen {
 
     private Stage stage;
     private Game game;
@@ -48,24 +46,23 @@ public class PlayScreen2 implements Screen {
     private Label instruction;
     private Label points;
     private Label timeBonus;
-    private Label equation1;
-    private Label equation2;
+    private Label equation;
+    private Label onlyOneRoot;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
     private Boolean isCorrect;
-    private boolean isXCorrect = false;
-    private boolean isYCorrect = false;
-
-
     private PlayDialog dialog;
-    private boolean isXSet = false;
-    private boolean isYSet = false;
+    private boolean isAnswer1Set = false;
+    private boolean isAnswer2Set = false;
+    private String x1 = "";
+    private String x2 = "";
 
 
-    public PlayScreen2(Game game, Player player) {
+
+    public PlayScreen3(Game game, Player player) {
         this.game = game;
         this.player = player;
 
@@ -104,7 +101,6 @@ public class PlayScreen2 implements Screen {
         nextStyle.down = crispy.getDrawable("button-arcade-pressed");
         next = new Button(nextStyle);
         next.setVisible(false);
-
 
 
         close = new Button(buttonStyle);
@@ -154,7 +150,7 @@ public class PlayScreen2 implements Screen {
         timeBonus.setColor(Color.BLACK);
         timeBonus.setVisible(false);
 
-        instruction = new Label("solve for x and y", skin);
+        instruction = new Label("Find all roots", skin);
         instruction.setPosition(450, 550);
         instruction.setColor(Color.BLACK);
 
@@ -164,6 +160,9 @@ public class PlayScreen2 implements Screen {
         nextLabel.setVisible(false);
         nextLabel.setColor(Color.BLACK);
 
+        onlyOneRoot = new Label("Only one root", skin);
+        onlyOneRoot.setColor(Color.BLACK);
+
 
         dialog = new PlayDialog("", skin);
         stage.addActor(attempts);
@@ -172,18 +171,16 @@ public class PlayScreen2 implements Screen {
         stage.addActor(next);
         stage.addActor(instruction);
 
-        final Simultaneous simul = new Simultaneous();
-        System.out.println(simul.getX());
-        System.out.println(simul.getY());
+        final Quadratic quadratic = new Quadratic();
 
 
-        equation1 = new Label(simul.firstToString(), skin);
-        equation2 = new Label(simul.secondToString(), skin);
-        equation1.setColor(Color.BLACK);
-        equation2.setColor(Color.BLACK);
+        equation = new Label(quadratic.toString(), skin);
 
-        final TextButton x = new TextButton("x = ", equationStyle);
-        final TextButton y = new TextButton("y = ", equationStyle);
+        equation.setColor(Color.BLACK);
+
+        final TextButton answer1 = new TextButton("x = ", equationStyle);
+        final TextButton answer2 = new TextButton("x = ", equationStyle);
+
 
 
 
@@ -195,11 +192,15 @@ public class PlayScreen2 implements Screen {
         table.add(nextLabel);
         table.add(next);
         table.row();
-        table.add(equation1).padBottom(20);
-        table.add(equation2).padBottom(20);
+        table.add(equation).padBottom(20);
         table.row();
-        table.add(x).padLeft(100);
-        table.add(y);
+        table.add(answer1).padLeft(100);
+        if (!quadratic.getOnlyOneRoot()) {
+            table.add(answer2);
+        }
+        else {
+            table.add(onlyOneRoot);
+        }
         table.setPosition(600, 400);
 
         Table answersTable = new Table(skin);
@@ -207,7 +208,7 @@ public class PlayScreen2 implements Screen {
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
-        dragAndDrop.addTarget(new Target(x) {
+        dragAndDrop.addTarget(new Target(answer1) {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
@@ -228,7 +229,7 @@ public class PlayScreen2 implements Screen {
         });
 
 
-        dragAndDrop.addTarget(new Target(y) {
+        dragAndDrop.addTarget(new Target(answer2) {
             @Override
             public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 
@@ -250,7 +251,7 @@ public class PlayScreen2 implements Screen {
 
 
         int count = 0;
-        for (String answer : simul.generateAnswers()) {
+        for (String answer : quadratic.generateAnswers()) {
             final TextButton label = new TextButton(answer, answerStyle);
 
             //label.setStyle();
@@ -274,7 +275,7 @@ public class PlayScreen2 implements Screen {
                     label.setVisible(false);
                     payload.setObject(label);
                     //System.out.println(label.getText());
-                    //if (label.getText().toString().equals(x.solveEquation())) {
+                    //if (label.getText().toString().equals(answer1.solveEquation())) {
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
                     draggedLabel.setColor(Color.BLACK);
@@ -288,68 +289,35 @@ public class PlayScreen2 implements Screen {
                 public void dragStop(InputEvent event, float xaxis, float yaxis, int pointer, Payload payload, Target target) {
 
                     if (target != null) {
-                        if (target.getActor().equals(x)) {
-                            x.setText("x = " + label.getText());
-                            setIsXSet();
-                            if (Float.valueOf(label.getText().toString()) == (simul.getX())) {
-                                System.out.printf("x is correct");
-                                setXCorrect(true);
-                                if (getIsYSet()) {
-                                    attemptsCount +=1;
-                                    incAttempts();
-                                    attempts.setText("attempts: " + attemptsCount);
-                                    if (isYCorrect()) {
-                                        System.out.println("correct");
-                                        feedback.setColor(Color.GREEN);
-                                        feedback.setText("correct!");
-                                        dragAndDrop.clear();
-                                        isCorrect = true;
-                                        next.setVisible(true);
-                                        nextLabel.setVisible(true);
-                                        incCorrectCount();
+                        if (quadratic.getOnlyOneRoot()) {
+                            answer1.setText("x = " + label.getText());
+                            if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1())) {
+                                incAttempts();
+                                System.out.println("correct");
+                                feedback.setColor(Color.GREEN);
+                                feedback.setText("correct!");
+                                dragAndDrop.clear();
+                                isCorrect = true;
+                                next.setVisible(true);
+                                nextLabel.setVisible(true);
+                                incCorrectCount();
+                            } else {
+                                System.out.println("false");
+                                feedback.setColor(Color.RED);
+                                feedback.setText("wrong, try again");
+                                incWrongCount();
+                                answer1.setText("x = ");
 
-                                    }
-                                    else {
-                                        System.out.println("false");
-                                        feedback.setColor(Color.RED);
-                                        feedback.setText("wrong, try again");
-                                        incWrongCount();
-                                        x.setText("x = ");
-                                        y.setText("y = ");
-                                        resetXandY();
-
-
-                                    }
-                                }
                             }
-                            else {
-                                setXCorrect(false);
-                                if (getIsYSet()) {
-                                    System.out.println("false");
-                                    feedback.setColor(Color.RED);
-                                    feedback.setText("wrong, try again");
-                                    incWrongCount();
-                                    x.setText("x = ");
-                                    y.setText("y = ");
-                                    resetXandY();
-
-                                }
-                            }
-
-                            System.out.println("x");
 
                         } else {
-                            System.out.println("y");
-                            y.setText("x = " + label.getText());
-                            setIsYSet();
-                            if (Float.valueOf(label.getText().toString()) == (simul.getY())) {
-                                System.out.printf("y is correct");
-                                setYCorrect(true);
-                                if (getIsXSet()) {
-                                    attemptsCount +=1;
+                            if (target.getActor().equals(answer1)) {
+                                answer1.setText("x = " + label.getText());
+                                if (isAnswer2Set()) {
                                     incAttempts();
-                                    attempts.setText("attempts: " + attemptsCount);
-                                    if (isXCorrect()) {
+                                    if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1()) &&
+                                            x2.equals("answer2")) {
+                                        //correct
                                         System.out.println("correct");
                                         feedback.setColor(Color.GREEN);
                                         feedback.setText("correct!");
@@ -358,38 +326,106 @@ public class PlayScreen2 implements Screen {
                                         next.setVisible(true);
                                         nextLabel.setVisible(true);
                                         incCorrectCount();
-
+                                    }
+                                    else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer2()) &&
+                                            x2.equals("answer1")) {
+                                        //correct
+                                        System.out.println("correct");
+                                        feedback.setColor(Color.GREEN);
+                                        feedback.setText("correct!");
+                                        dragAndDrop.clear();
+                                        isCorrect = true;
+                                        next.setVisible(true);
+                                        nextLabel.setVisible(true);
+                                        incCorrectCount();
                                     }
                                     else {
+                                        //wrong
                                         System.out.println("false");
                                         feedback.setColor(Color.RED);
                                         feedback.setText("wrong, try again");
                                         incWrongCount();
-                                        x.setText("x = ");
-                                        y.setText("y = ");
-                                        resetXandY();
-
-
+                                        answer1.setText("x = ");
+                                        answer1.setText("x = ");
+                                        x1 = "";
+                                        x2 = "";
+                                        setIsAnswer1Set(false);
+                                        setIsAnswer2Set(false);
                                     }
+
+                                }
+                                else {
+                                    setIsAnswer1Set(true);
+                                    if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1())) {
+                                        x1 = "answer1";
+                                    }
+                                    else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer2())) {
+                                        x1 = "answer2";
+                                    }
+
+
                                 }
                             }
                             else {
-                                setYCorrect(false);
-                                if (getIsXSet()) {
-                                    System.out.println("false");
-                                    feedback.setColor(Color.RED);
-                                    feedback.setText("wrong, try again");
-                                    incWrongCount();
-                                    x.setText("x = ");
-                                    y.setText("y = ");
-                                    resetXandY();
+                                answer2.setText("x = " + label.getText());
+
+                                if (isAnswer1Set()) {
+                                    incAttempts();
+                                    if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer2()) &&
+                                            x1.equals("answer1")) {
+                                        //correct
+                                        System.out.println("correct");
+                                        feedback.setColor(Color.GREEN);
+                                        feedback.setText("correct!");
+                                        dragAndDrop.clear();
+                                        isCorrect = true;
+                                        next.setVisible(true);
+                                        nextLabel.setVisible(true);
+                                        incCorrectCount();
+                                    }
+                                    else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1()) &&
+                                            x1.equals("answer2")) {
+                                        //correct
+                                        System.out.println("correct");
+                                        feedback.setColor(Color.GREEN);
+                                        feedback.setText("correct!");
+                                        dragAndDrop.clear();
+                                        isCorrect = true;
+                                        next.setVisible(true);
+                                        nextLabel.setVisible(true);
+                                        incCorrectCount();
+                                    }
+                                    else {
+                                        //wrong
+                                        System.out.println("false");
+                                        feedback.setColor(Color.RED);
+                                        feedback.setText("wrong, try again");
+                                        incWrongCount();
+                                        answer1.setText("x = ");
+                                        answer2.setText("x = ");
+                                        x1 = "";
+                                        x2 = "";
+                                        setIsAnswer1Set(false);
+                                        setIsAnswer2Set(false);
+
+                                    }
+
+                                }
+                                else {
+                                    setIsAnswer2Set(true);
+                                    if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer2())) {
+                                        x2 = "answer2";
+                                    }
+                                    else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1())) {
+                                        x2 = "answer1";
+                                    }
+
 
                                 }
                             }
                         }
-
                     }
-                    label.setVisible(true);
+                        label.setVisible(true);
                 }
             });
         }
@@ -421,7 +457,7 @@ public class PlayScreen2 implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("clicked");
 
-                game.setScreen(new PlayScreen2(game, player));
+                game.setScreen(new PlayScreen3(game, player));
 
                 return true;
             }
@@ -469,7 +505,7 @@ public class PlayScreen2 implements Screen {
             }
             else if (timer == 0) {
                 incWrongCount();
-                game.setScreen(new PlayScreen2(game, player));
+                game.setScreen(new PlayScreen3(game, player));
             }
         }
     }
@@ -492,12 +528,12 @@ public class PlayScreen2 implements Screen {
 
     public void incCorrectCount() {
         player.incCorrectCount();
-        player.incPoints(2, timer);
+        player.incPoints(3, timer);
         points.setText("Points: " + Integer.toString(player.getPoints(2)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(2) >= 300 && !player.getSection(3)) {
-            player.completeSection(2);
+        if (player.getPoints(3) >= 300 && !player.getSection(3)) {
+            player.completeSection(3);
             dialog.show(stage);
 
         }
@@ -505,46 +541,30 @@ public class PlayScreen2 implements Screen {
 
     public void incWrongCount() {
         player.incWrongCount();
-        player.decPoints(2);
-        points.setText("Points: " + Integer.toString(player.getPoints(2)));
+        player.decPoints(3);
+        points.setText("Points: " + Integer.toString(player.getPoints(3)));
     }
 
-    public void setIsXSet() {
-        isXSet = true;
-    }
-    public void setIsYSet() {
-        isYSet = true;
+
+
+    public boolean isAnswer1Set() {
+        return isAnswer1Set;
     }
 
-    public boolean getIsXSet() {
-        return isXSet;
+
+    public boolean isAnswer2Set() {
+        return isAnswer2Set;
     }
 
-    public boolean getIsYSet() {
-        return isYSet;
+    public void setIsAnswer1Set(boolean isSet) {
+        isAnswer1Set = isSet;
     }
 
-    public boolean isXCorrect() {
-        return isXCorrect;
+    public void setIsAnswer2Set(boolean isSet) {
+        isAnswer2Set = isSet;
     }
 
-    public void setXCorrect(boolean XCorrect) {
-        isXCorrect = XCorrect;
-    }
 
-    public boolean isYCorrect() {
-        return isYCorrect;
-    }
 
-    public void setYCorrect(boolean YCorrect) {
-        isYCorrect = YCorrect;
-    }
-
-    public void resetXandY(){
-        isXSet = false;
-        isYSet = false;
-        isXCorrect = false;
-        isYCorrect = false;
-
-    }
 }
+
