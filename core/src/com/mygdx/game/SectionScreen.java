@@ -24,6 +24,7 @@ public class SectionScreen implements Screen {
     private Game game;
     private Skin crispy;
     private BitmapFont font;
+    private BitmapFont font2;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
@@ -33,8 +34,12 @@ public class SectionScreen implements Screen {
     private TextButton section3;
     private TextButton.TextButtonStyle sectionStyle;
     private Button.ButtonStyle buttonStyle;
+    private Label.LabelStyle labelStyle;
     private Skin skin;
     private Sound click;
+    private Label pointsNeeded2;
+    private Label pointsNeeded3;
+
 
     public SectionScreen(Game game, Player player) {
         this.game = game;
@@ -51,6 +56,9 @@ public class SectionScreen implements Screen {
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         font.setColor(Color.BLACK);
+
+        font2 = new BitmapFont(Gdx.files.internal("small.fnt"), false);
+        font2.setColor(Color.BLACK);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -75,21 +83,42 @@ public class SectionScreen implements Screen {
         close.setPosition(50, 650);
 
         section1 = new TextButton("Section 1: Simple Equations", sectionStyle);
-        section1.setPosition(100, 500);
         section2 = new TextButton("Section 2: Simultaneous Equations", sectionStyle);
-        section2.setPosition(100, 400);
+        section3 = new TextButton("Section 3: Quadratic Equations", sectionStyle);
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = font2;
+        labelStyle.fontColor = Color.BLACK;
+        pointsNeeded2 = new Label( Integer.toString(player.getPoints(1)) + "/200 points", labelStyle);
+        pointsNeeded2.setPosition(section2.getWidth() + 50, 425);
+        pointsNeeded2.setVisible(false);
+        pointsNeeded3 = new Label( Integer.toString(player.getPoints(2)) + "/300 points", labelStyle);
+        pointsNeeded3.setPosition( section3.getWidth() + 50, 325);
+        pointsNeeded3.setVisible(false);
+
+        section1.setPosition(50, 500);
+        section2.setPosition(50, 400);
         if (!player.getSection(1)) {
             section2.setColor(Color.GRAY);
+            pointsNeeded2.setVisible(true);
+            //section2.setWidth(1200);
+            //String points = Integer.toString(player.getPoints(1)) + "/200 points";
+            //section2.setText("Section 2: Simultaneous Equations " + points);
         }
-        section3 = new TextButton("Section 3: Quadratic Equations", sectionStyle);
-        section3.setPosition(100, 300);
+        section3.setPosition(50, 300);
         if (!player.getSection(2)) {
             section3.setColor(Color.GRAY);
+            pointsNeeded3.setVisible(true);
+           // section3.setWidth(1200);
+            //String points = Integer.toString(player.getPoints(2)) + "/300 points";
+            //section3.setText("Section 3: Quadratic Equations " + points);
         }
 
         stage.addActor(section1);
         stage.addActor(section2);
         stage.addActor(section3);
+        stage.addActor(pointsNeeded2);
+        stage.addActor(pointsNeeded3);
 
 
     }
