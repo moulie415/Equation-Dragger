@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -155,7 +153,7 @@ public class PlayScreen2 implements Screen {
         timeBonus.setVisible(false);
 
         instruction = new Label("solve for x and y", skin);
-        instruction.setPosition(450, 550);
+        instruction.setPosition(400, 550);
         instruction.setColor(Color.BLACK);
 
 
@@ -195,7 +193,7 @@ public class PlayScreen2 implements Screen {
         table.add(nextLabel);
         table.add(next);
         table.row();
-        table.add(equation1).padBottom(20);
+        table.add(equation1).padLeft(200).padBottom(20);
         table.add(equation2).padBottom(20);
         table.row();
         table.add(x).padLeft(100);
@@ -496,7 +494,7 @@ public class PlayScreen2 implements Screen {
         points.setText("Points: " + Integer.toString(player.getPoints(2)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(2) >= 300 && !player.getSection(3)) {
+        if (player.getPoints(2) >= 300 && !player.getSection(2)) {
             player.completeSection(2);
             dialog.show(stage);
 

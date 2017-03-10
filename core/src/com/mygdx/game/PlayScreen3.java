@@ -139,7 +139,7 @@ public class PlayScreen3 implements Screen {
         attempts.setPosition(200, 630);
         attempts.setColor(Color.BLACK);
 
-        points = new Label("Points: " + Integer.toString(player.getPoints(2)), skin);
+        points = new Label("Points: " + Integer.toString(player.getPoints(3)), skin);
         points.setFontScale((float) 0.5);
         points.setPosition(400, 630);
         points.setColor(Color.BLACK);
@@ -181,6 +181,9 @@ public class PlayScreen3 implements Screen {
         final TextButton answer1 = new TextButton("x = ", equationStyle);
         final TextButton answer2 = new TextButton("x = ", equationStyle);
 
+        System.out.println(quadratic.getAnswer1());
+        System.out.println(quadratic.getAnswer2());
+
 
 
 
@@ -192,9 +195,9 @@ public class PlayScreen3 implements Screen {
         table.add(nextLabel);
         table.add(next);
         table.row();
-        table.add(equation).padBottom(20);
+        table.add(equation).colspan(2).center().padBottom(20);
         table.row();
-        table.add(answer1).padLeft(100);
+        table.add(answer1).padLeft(150);
         if (!quadratic.getOnlyOneRoot()) {
             table.add(answer2);
         }
@@ -204,7 +207,7 @@ public class PlayScreen3 implements Screen {
         table.setPosition(600, 400);
 
         Table answersTable = new Table(skin);
-        answersTable.setPosition(650, 150);
+        answersTable.setPosition(600, 150);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
@@ -529,12 +532,11 @@ public class PlayScreen3 implements Screen {
     public void incCorrectCount() {
         player.incCorrectCount();
         player.incPoints(3, timer);
-        points.setText("Points: " + Integer.toString(player.getPoints(2)));
+        points.setText("Points: " + Integer.toString(player.getPoints(3)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
         if (player.getPoints(3) >= 300 && !player.getSection(3)) {
             player.completeSection(3);
-            dialog.show(stage);
 
         }
     }

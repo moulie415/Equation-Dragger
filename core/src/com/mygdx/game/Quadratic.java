@@ -91,7 +91,14 @@ public class Quadratic {
 
     public ArrayList<String> generateAnswers() {
         ArrayList<String> answers= new ArrayList<String>();
-        for (int i = 0; i < 10; i++) {
+        int start;
+        if (onlyOneRoot) {
+            start = 0;
+        }
+        else {
+            start = 1;
+        }
+        for (int i = start; i < 11; i++) {
             int num;
             do {
                 num = randInt(1, 10);
