@@ -43,11 +43,6 @@ public class Stats implements Screen {
     public Stats(Game game, Player player) {
         this.game = game;
         this.player = player;
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
-
-    }
-    @Override
-    public void show() {
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -56,9 +51,7 @@ public class Stats implements Screen {
         stage = new Stage(viewport);
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
-
-        Gdx.input.setInputProcessor(stage);
-
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
@@ -94,7 +87,6 @@ public class Stats implements Screen {
         buttonStyle.up = crispy.getDrawable("button-close");
         buttonStyle.over = crispy.getDrawable("button-close-over");
         buttonStyle.down = crispy.getDrawable("button-close-pressed");
-
         close = new Button(buttonStyle);
 
         close.setSize(50,50);
@@ -103,12 +95,17 @@ public class Stats implements Screen {
 
         close.setPosition(50, 650);
 
+    }
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         close.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("closed");
                 click.play();
+                System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
