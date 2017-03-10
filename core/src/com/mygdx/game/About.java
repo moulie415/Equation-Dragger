@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
+import static com.mygdx.game.TextRenderer.renderString;
+
 
 /**
  * Created by henrymoule on 06/03/2017.
@@ -24,7 +26,6 @@ public class About implements Screen {
     private Game game;
     private Player player;
     private Skin crispy;
-    private Skin skin;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
@@ -32,6 +33,7 @@ public class About implements Screen {
     private Label builtUsing;
     private Label email;
     private Label emailLink;
+    private Label underline;
     private Label.LabelStyle style;
     private Label.LabelStyle style2;
     private BitmapFont font;
@@ -52,7 +54,6 @@ public class About implements Screen {
         viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here!
         stage = new Stage(viewport);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
 
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
@@ -72,9 +73,12 @@ public class About implements Screen {
         email.setPosition(200, 400);
         emailLink = new Label("henry.moule@gmail.com", style2);
         emailLink.setPosition(400, 400);
+        underline = new Label("_______________________", style2);
+        underline.setPosition(400,400);
 
         builtUsing = new Label("Built using", style);
         builtUsing.setPosition(200, 300);
+
 
 
 
@@ -83,6 +87,7 @@ public class About implements Screen {
         close.setSize(50,50);
 
 
+        stage.addActor(underline);
         stage.addActor(close);
         stage.addActor(developer);
         stage.addActor(email);

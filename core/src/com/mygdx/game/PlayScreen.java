@@ -123,7 +123,6 @@ public class PlayScreen implements Screen {
         BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-
         Skin test = new Skin();
 
         test.addRegions(new TextureAtlas(Gdx.files.internal("uiskin.atlas")));

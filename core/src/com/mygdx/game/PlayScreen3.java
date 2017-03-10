@@ -49,7 +49,7 @@ public class PlayScreen3 implements Screen {
     private Label instruction;
     private Label points;
     private Label timeBonus;
-    private Label equation;
+    private Table equation;
     private Label onlyOneRoot;
     private int attemptsCount;
     private Button.ButtonStyle buttonStyle;
@@ -186,9 +186,7 @@ public class PlayScreen3 implements Screen {
         final Quadratic quadratic = new Quadratic();
 
 
-        equation = new Label(quadratic.toString(), skin);
-
-        equation.setColor(Color.BLACK);
+        equation = quadratic.getTable();
 
         final TextButton answer1 = new TextButton("x = ", equationStyle);
         final TextButton answer2 = new TextButton("x = ", equationStyle);

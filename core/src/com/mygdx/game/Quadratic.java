@@ -1,9 +1,15 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 import static com.mygdx.game.Equation.randInt;
+import static com.mygdx.game.TextRenderer.renderString;
 
 /**
  * Created by henrymoule on 09/03/2017.
@@ -65,17 +71,18 @@ public class Quadratic {
 
     }
 
-    public String toString() {
+    public Table getTable() {
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         String part1;
         String part2;
         String part3 = Integer.toString((int)Math.round(coefficientC));
 
         if (coefficientA == 1) {
-            part1 = "x\u00B2 ";
+            part1 = "x^2^ ";
 
         }
         else {
-            part1 = Integer.toString((int)Math.round(coefficientA)) + "x\u00B2 ";
+            part1 = Integer.toString((int)Math.round(coefficientA)) + "x^2^ ";
         }
 
         if (coefficientB == 1) {
@@ -85,7 +92,7 @@ public class Quadratic {
             part2 = " " + Integer.toString((int)Math.round(coefficientB)) + "x ";
         }
 
-        return part1 + operator1 + part2 + operator2 + " " + part3 + " = 0";
+        return renderString(skin, part1 + operator1 + part2 + operator2 + " " + part3 + " = 0", Color.BLACK);
     }
 
 
