@@ -4,10 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -30,7 +28,6 @@ public class Tutorial implements Screen {
     private int VIRTUAL_HEIGHT;
     private Button close;
     private Texture image;
-    private TextureRegion region;
     private Button.ButtonStyle buttonStyle;
     private Sound click;
 
@@ -65,7 +62,6 @@ public class Tutorial implements Screen {
         close.setPosition(50, 650);
 
         image = new Texture(Gdx.files.internal("images/tutorial.png"));
-        region = new TextureRegion(image);
     }
 
 
