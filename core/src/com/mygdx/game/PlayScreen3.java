@@ -205,11 +205,11 @@ public class PlayScreen3 implements Screen {
         feedbackWrong = new Label("wrong, try again", skin);
         feedbackWrong.setVisible(false);
         feedbackWrong.setColor(Color.RED);
-        feedbackCorrect.setPosition(400, 480);
-        feedbackWrong.setPosition(400, 480);
-        nextLabel.setPosition(625, 480);
+        feedbackCorrect.setPosition(400, 490);
+        feedbackWrong.setPosition(400, 490);
+        nextLabel.setPosition(625, 490);
         nextLabel.setWidth(200);
-        next.setPosition(950, 470);
+        next.setPosition(950, 480);
 
         table.add(equation).colspan(2).center().padBottom(20);
         table.row();

@@ -58,7 +58,7 @@ public class TextRenderer {
                         table.add(currentBlock.toString(), "default-font", color).padTop(PADDING);
                         break;
                     case SUPERSCRIPT:
-                        table.add(currentBlock.toString(), "default-font", color).padBottom(PADDING);
+                        table.add(currentBlock.toString(), "small-font", color).padBottom(PADDING);
                         break;
                 }
                 currentBlock = new StringBuilder();
