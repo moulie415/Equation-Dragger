@@ -141,7 +141,7 @@ public class PlayScreen3 implements Screen {
 
         timer = 40;
 
-        timerLabel = new Label("20", test);
+        timerLabel = new Label("40", test);
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
