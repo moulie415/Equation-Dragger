@@ -6,6 +6,8 @@ import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,18 +29,22 @@ public class SplashScreen implements Screen {
     private TweenManager tweenManager;
     private Game game;
     private Player player;
-    private Sound music;
+    private Music song;
+
 
     public SplashScreen(Game game, Player player) {
         this.game = game;
         this.player = player;
-        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        song = Gdx.audio.newMusic(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        song.play();
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         batch.begin();
         splash.draw(batch);
@@ -58,7 +64,6 @@ public class SplashScreen implements Screen {
     public void show() {
         // apply preferences
 
-        music.play();
         batch = new SpriteBatch();
 
         tweenManager = new TweenManager();
@@ -111,6 +116,7 @@ public class SplashScreen implements Screen {
     public void dispose() {
         batch.dispose();
         splash.getTexture().dispose();
+        song.dispose();
     }
 
 }

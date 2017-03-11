@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,13 +31,13 @@ public class Tutorial implements Screen {
     private Texture image;
     private Button.ButtonStyle buttonStyle;
     private Sound click;
-    private Sound darude;
+    private Music darude;
 
     public Tutorial(Game game, Player player) {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        darude = Gdx.audio.newSound(Gdx.files.internal("sounds/darude_dankstorm.mp3"));
+        darude = Gdx.audio.newMusic(Gdx.files.internal("sounds/darude_dankstorm.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;

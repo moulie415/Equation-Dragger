@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.Game;
@@ -40,7 +41,7 @@ public class MainMenu implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
-    private Sound daniel;
+    private Music daniel;
     private Texture doritos;
     private Texture mtnDew;
 
@@ -48,7 +49,7 @@ public class MainMenu implements Screen {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        daniel = Gdx.audio.newSound(Gdx.files.internal("sounds/daniel_uk.mp3"));
+        daniel = Gdx.audio.newMusic(Gdx.files.internal("sounds/daniel_uk.mp3"));
         doritos = new Texture(Gdx.files.internal("images/doritos-nacho-cheese.png"));
         mtnDew = new Texture(Gdx.files.internal("images/mountain-dew.jpg"));
 
@@ -111,10 +112,6 @@ public class MainMenu implements Screen {
         stage.addActor(stats);
         stage.addActor(about);
 
-        if (!player.getInstructional()) {
-            daniel.play();
-        }
-        player.setInstructional(true);
 
         start.addListener(new InputListener(){
 
@@ -167,6 +164,10 @@ public class MainMenu implements Screen {
             }
         });
 
+        if (!player.getInstructional()) {
+            daniel.play();
+        }
+        player.setInstructional(true);
     }
 
     @Override
