@@ -71,10 +71,10 @@ public class PlayScreen2 implements Screen {
     public PlayScreen2(Game game, Player player) {
         this.game = game;
         this.player = player;
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
-        correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
-        wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
-        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/countdown.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        correct = Gdx.audio.newSound(Gdx.files.internal("sounds/intervention.mp3"));
+        wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/2SED4AIRHORN_short.mp3"));
+        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/tactical_nuke.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;

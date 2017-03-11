@@ -34,7 +34,7 @@ public class Tutorial implements Screen {
     public Tutorial(Game game, Player player) {
         this.game = game;
         this.player = player;
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;

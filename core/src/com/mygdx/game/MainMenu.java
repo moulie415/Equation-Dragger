@@ -31,6 +31,8 @@ public class MainMenu implements Screen {
     private TextButton tutorial;
     private TextButton stats;
     private TextButton about;
+    private Label title;
+    private Label.LabelStyle style;
     private Skin skin;
     private Game game;
     private Player player;
@@ -38,11 +40,14 @@ public class MainMenu implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
+    private Sound music;
 
     public MainMenu(Game game, Player player ) {
         this.game = game;
         this.player = player;
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_univeral.mp3"));
+
     }
 
     @Override
@@ -50,12 +55,20 @@ public class MainMenu implements Screen {
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
+
         //camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here! (camera taken out)
         stage = new Stage(viewport);
 
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+
+        style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.BLACK;
+
+        title = new Label("Equation Quickscoper 420", style);
+
 
 
         skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
@@ -82,21 +95,26 @@ public class MainMenu implements Screen {
         about = new TextButton("ABOUT", buttonStyle);
         about.setSize(350,100);
 
-        start.setPosition(500, 550 );
-        tutorial.setPosition(500, 400);
-        stats.setPosition(500, 250);
-        about.setPosition(500, 100);
+        title.setPosition(300, 650);
+        start.setPosition(500, 500 );
+        tutorial.setPosition(500, 350);
+        stats.setPosition(500, 200);
+        about.setPosition(500, 50);
 
+        stage.addActor(title);
         stage.addActor(start);
         stage.addActor(tutorial);
         stage.addActor(stats);
         stage.addActor(about);
+
+        music.play();
 
         start.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                music.dispose();
                 game.setScreen(new SectionScreen(game, player));
 
 
@@ -109,6 +127,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                music.dispose();
                 game.setScreen(new Tutorial(game, player));
 
                 return true;
@@ -120,6 +139,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                music.dispose();
 
                 game.setScreen(new About(game, player));
 
@@ -133,6 +153,7 @@ public class MainMenu implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 click.play();
+                music.dispose();
                 game.setScreen(new Stats(game, player));
 
                 return true;
@@ -175,6 +196,7 @@ public class MainMenu implements Screen {
     public void dispose() {
         stage.dispose();
         click.dispose();
+        music.dispose();
 
         try {
             player.savePlayer(player);

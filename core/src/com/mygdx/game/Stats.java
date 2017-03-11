@@ -51,7 +51,7 @@ public class Stats implements Screen {
         stage = new Stage(viewport);
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
