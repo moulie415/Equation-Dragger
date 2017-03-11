@@ -209,12 +209,6 @@ public class MainMenu implements Screen {
         click.dispose();
         daniel.dispose();
 
-        try {
-            player.savePlayer(player);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 }

@@ -118,23 +118,12 @@ public class PlayScreen implements Screen {
         close.setPosition(50, 650);
 
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 128;
 
-        BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-        Skin test = new Skin();
-
-        test.addRegions(new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
-        test.add("default-font", font12);
-
-        test.load(Gdx.files.internal("digital.json"));
 
         timer = 20;
 
-        timerLabel = new Label("20", test);
+        timerLabel = new Label("20", skin);
         timerLabel.setColor(Color.BLUE);
         timerLabel.setPosition(1000, 600);
 
@@ -354,7 +343,7 @@ public class PlayScreen implements Screen {
             timeCount += dt;
             if (timeCount >= 1 && timer > 0) {
                 timer--;
-                timerLabel.setText(String.format("%3d", timer));
+                timerLabel.setText(Integer.toString(timer));
                 timeCount = 0;
 
             }
@@ -378,13 +367,6 @@ public class PlayScreen implements Screen {
         countdown.dispose();
         correct.dispose();
         smokeWeed.dispose();
-        try {
-            player.savePlayer(player);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void incAttempts() {
