@@ -41,12 +41,16 @@ public class MainMenu implements Screen {
     private int VIRTUAL_HEIGHT;
     private Sound click;
     private Sound music;
+    private Texture doritos;
+    private Texture mtnDew;
 
     public MainMenu(Game game, Player player ) {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_univeral.mp3"));
+        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        doritos = new Texture(Gdx.files.internal("images/doritos-nacho-cheese.png"));
+        mtnDew = new Texture(Gdx.files.internal("images/mountain-dew.jpg"));
 
     }
 
@@ -167,6 +171,10 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().begin();
+        stage.getBatch().draw(doritos, 100, 100);
+        stage.getBatch().draw(mtnDew, 850, 150);
+        stage.getBatch().end();
         stage.draw();
 
     }

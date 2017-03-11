@@ -15,7 +15,7 @@ public class PlayDialog extends Dialog {
 
     public PlayDialog(String title, Skin skin) {
         super(title, skin);
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
     }
 
     public PlayDialog(String title, Skin skin, String windowStyleName) {

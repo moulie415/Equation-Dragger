@@ -58,6 +58,7 @@ public class PlayScreen implements Screen {
     private Sound correct;
     private Sound wrong;
     private Sound countdown;
+    private Sound smokeWeed;
     private boolean isPlaying = false;
 
     public PlayScreen(Game game, Player player) {
@@ -68,6 +69,7 @@ public class PlayScreen implements Screen {
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/intervention.mp3"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/2SED4AIRHORN_short.mp3"));
         countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/tactical_nuke.mp3"));
+        smokeWeed = Gdx.audio.newSound(Gdx.files.internal("sounds/smoke_weed.mp3"));
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
 
@@ -306,7 +308,7 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
+                smokeWeed.play();
                 System.out.println("clicked");
 
                 game.setScreen(new PlayScreen(game, player));
@@ -360,7 +362,7 @@ public class PlayScreen implements Screen {
                 wrong.play();
                 game.setScreen(new PlayScreen(game, player));
             }
-            if (timer == 10 && !isPlaying) {
+            if (timer == 6 && !isPlaying) {
                 isPlaying = true;
                 countdown.play();
             }
@@ -374,6 +376,7 @@ public class PlayScreen implements Screen {
         wrong.dispose();
         countdown.dispose();
         correct.dispose();
+        smokeWeed.dispose();
         try {
             player.savePlayer(player);
         }

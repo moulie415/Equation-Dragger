@@ -495,7 +495,7 @@ public class PlayScreen2 implements Screen {
                 wrong.play();
                 game.setScreen(new PlayScreen2(game, player));
             }
-            if (timer == 10 && !isPlaying) {
+            if (timer == 6 && !isPlaying) {
                 isPlaying = true;
                 countdown.play();
             }

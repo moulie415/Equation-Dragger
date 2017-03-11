@@ -540,7 +540,7 @@ public class PlayScreen3 implements Screen {
                 game.setScreen(new PlayScreen3(game, player));
             }
         }
-        if (timer == 10 && !isPlaying) {
+        if (timer == 6 && !isPlaying) {
             isPlaying = true;
             countdown.play();
         }

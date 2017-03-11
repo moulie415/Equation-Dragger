@@ -15,7 +15,7 @@ public class SectionDialog extends Dialog {
 
     public SectionDialog(String title, Skin skin) {
         super(title, skin);
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
     }
 
     public SectionDialog(String title, Skin skin, String windowStyleName) {
