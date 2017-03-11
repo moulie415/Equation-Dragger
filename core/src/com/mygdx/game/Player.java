@@ -21,6 +21,8 @@ public class Player implements Serializable {
     private int section1Points;
     private int section2Points;
     private int section3Points;
+    private boolean instructional = false;
+    private boolean splash = false;
 
 
     public Player() {
@@ -230,6 +232,21 @@ public class Player implements Serializable {
                 section = false;
         }
         return section;
+    }
+
+    public void setInstructional(boolean instructional) {
+        this.instructional = instructional;
+    }
+
+    public boolean getInstructional() {
+        return instructional;
+    }
+    public void setSplash(boolean splash) {
+        this.splash = splash;
+    }
+
+    public boolean getSplash() {
+        return splash;
     }
 
 }

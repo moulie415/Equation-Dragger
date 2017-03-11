@@ -45,7 +45,14 @@ public class MyGdxGame extends Game {
 			}
 			System.out.println("Player Does Not Exist, Creating Player and Saving Player");
 		}
-		game.setScreen(new MainMenu(game, player));
+		//game.setScreen(new MainMenu(game, player));
+		player.setInstructional(false);
+		if (player.getSplash()) {
+			game.setScreen(new MainMenu(game,player));
+		}
+		else {
+			game.setScreen(new SplashScreen(game, player));
+		}
 	}
 
 	@Override

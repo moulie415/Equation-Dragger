@@ -30,11 +30,13 @@ public class Tutorial implements Screen {
     private Texture image;
     private Button.ButtonStyle buttonStyle;
     private Sound click;
+    private Sound darude;
 
     public Tutorial(Game game, Player player) {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        darude = Gdx.audio.newSound(Gdx.files.internal("sounds/darude_dankstorm.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -68,6 +70,7 @@ public class Tutorial implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        darude.play();
 
 
         close.addListener(new InputListener(){
@@ -76,6 +79,7 @@ public class Tutorial implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
                 click.play();
+                darude.dispose();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -123,6 +127,7 @@ public class Tutorial implements Screen {
     public void dispose() {
         stage.dispose();
         click.dispose();
+        darude.dispose();
 
     }
 

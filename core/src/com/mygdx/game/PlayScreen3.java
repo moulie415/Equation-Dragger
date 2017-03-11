@@ -66,6 +66,7 @@ public class PlayScreen3 implements Screen {
     private Sound correct;
     private Sound wrong;
     private Sound countdown;
+    private Sound smokeWeed;
     private boolean isPlaying = false;
 
 
@@ -77,6 +78,7 @@ public class PlayScreen3 implements Screen {
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/intervention.mp3"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/2SED4AIRHORN_short.mp3"));
         countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/tactical_nuke.mp3"));
+        smokeWeed = Gdx.audio.newSound(Gdx.files.internal("sounds/smoke_weed.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -347,6 +349,7 @@ public class PlayScreen3 implements Screen {
                                         next.setVisible(true);
                                         nextLabel.setVisible(true);
                                         incCorrectCount();
+                                        countdown.dispose();
                                     }
                                     else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer2()) &&
                                             x2.equals("answer1")) {
@@ -360,6 +363,7 @@ public class PlayScreen3 implements Screen {
                                         next.setVisible(true);
                                         nextLabel.setVisible(true);
                                         incCorrectCount();
+                                        countdown.dispose();
                                     }
                                     else {
                                         //wrong
@@ -405,6 +409,7 @@ public class PlayScreen3 implements Screen {
                                         next.setVisible(true);
                                         nextLabel.setVisible(true);
                                         incCorrectCount();
+                                        countdown.dispose();
                                     }
                                     else if (Float.valueOf(label.getText().toString()) == (quadratic.getAnswer1()) &&
                                             x1.equals("answer2")) {
@@ -418,6 +423,7 @@ public class PlayScreen3 implements Screen {
                                         next.setVisible(true);
                                         nextLabel.setVisible(true);
                                         incCorrectCount();
+                                        countdown.dispose();
                                     }
                                     else {
                                         //wrong
@@ -485,7 +491,7 @@ public class PlayScreen3 implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
+                smokeWeed.play();
                 System.out.println("clicked");
 
                 game.setScreen(new PlayScreen3(game, player));
@@ -553,6 +559,7 @@ public class PlayScreen3 implements Screen {
         correct.dispose();
         wrong.dispose();
         countdown.dispose();
+        smokeWeed.dispose();
         try {
             player.savePlayer(player);
         }

@@ -40,7 +40,7 @@ public class MainMenu implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
-    private Sound music;
+    private Sound daniel;
     private Texture doritos;
     private Texture mtnDew;
 
@@ -48,7 +48,7 @@ public class MainMenu implements Screen {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        daniel = Gdx.audio.newSound(Gdx.files.internal("sounds/daniel_uk.mp3"));
         doritos = new Texture(Gdx.files.internal("images/doritos-nacho-cheese.png"));
         mtnDew = new Texture(Gdx.files.internal("images/mountain-dew.jpg"));
 
@@ -111,14 +111,17 @@ public class MainMenu implements Screen {
         stage.addActor(stats);
         stage.addActor(about);
 
-        music.play();
+        if (!player.getInstructional()) {
+            daniel.play();
+        }
+        player.setInstructional(true);
 
         start.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                music.dispose();
+                daniel.dispose();
                 game.setScreen(new SectionScreen(game, player));
 
 
@@ -131,7 +134,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                music.dispose();
+                daniel.dispose();
                 game.setScreen(new Tutorial(game, player));
 
                 return true;
@@ -143,7 +146,7 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                music.dispose();
+                daniel.dispose();
 
                 game.setScreen(new About(game, player));
 
@@ -157,7 +160,7 @@ public class MainMenu implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 click.play();
-                music.dispose();
+                daniel.dispose();
                 game.setScreen(new Stats(game, player));
 
                 return true;
@@ -204,7 +207,7 @@ public class MainMenu implements Screen {
     public void dispose() {
         stage.dispose();
         click.dispose();
-        music.dispose();
+        daniel.dispose();
 
         try {
             player.savePlayer(player);

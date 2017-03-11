@@ -37,6 +37,7 @@ public class SectionScreen implements Screen {
     private Label.LabelStyle labelStyle;
     private Skin skin;
     private Sound click;
+    private Sound airporn;
     private Label pointsNeeded2;
     private Label pointsNeeded3;
 
@@ -45,6 +46,7 @@ public class SectionScreen implements Screen {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        airporn = Gdx.audio.newSound(Gdx.files.internal("sounds/AIRPORN.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -145,7 +147,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
+                airporn.play();
                 game.setScreen(new PlayScreen(game, player));
                 return true;
             }
@@ -155,7 +157,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
+                airporn.play();
                 if (player.getSection(1)) {
                     game.setScreen(new PlayScreen2(game, player));
                 }
@@ -171,7 +173,7 @@ public class SectionScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
+                airporn.play();
                 if (player.getSection(2)) {
                     game.setScreen(new PlayScreen3(game, player));
                 }
@@ -222,6 +224,7 @@ public class SectionScreen implements Screen {
     public void dispose() {
         stage.dispose();
         click.dispose();
+        airporn.dispose();
 
     }
 

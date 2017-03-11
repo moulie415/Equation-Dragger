@@ -39,6 +39,7 @@ public class Stats implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
+    private Sound never;
 
     public Stats(Game game, Player player) {
         this.game = game;
@@ -52,6 +53,7 @@ public class Stats implements Screen {
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        never = Gdx.audio.newSound(Gdx.files.internal("sounds/never_done_that.mp3"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
@@ -99,12 +101,14 @@ public class Stats implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        never.play();
 
         close.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
+                never.dispose();
                 System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
@@ -143,6 +147,7 @@ public class Stats implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        never.dispose();
 
     }
 }

@@ -266,6 +266,7 @@ public class PlayScreen implements Screen {
                             next.setVisible(true);
                             nextLabel.setVisible(true);
                             incCorrectCount();
+                            countdown.dispose();
 
                         } else {
                             wrong.play();
