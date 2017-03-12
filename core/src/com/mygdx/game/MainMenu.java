@@ -194,8 +194,8 @@ public class MainMenu implements Screen {
 
         if (player.getInstructional() && player.getInstructionalCount() == 0) {
             daniel.play();
-            player.setInstructionalCount(1);
         }
+        player.setInstructionalCount(1);
     }
 
     @Override
