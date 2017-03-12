@@ -117,10 +117,6 @@ public class PlayScreen implements Screen {
 
         close.setPosition(50, 650);
 
-
-
-
-
         timer = 20;
 
         timerLabel = new Label("20", skin);
@@ -286,10 +282,10 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MainMenu(game, player));
                 click.play();
                 countdown.dispose();
                 System.out.println("closed");
-                game.setScreen(new MainMenu(game, player));
                 return true;
             }
         });
