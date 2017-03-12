@@ -297,15 +297,15 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
-                countdown.dispose();
-                System.out.println("closed");
                 try {
                     player.savePlayer(player);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
+                click.play();
+                countdown.dispose();
+                System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }

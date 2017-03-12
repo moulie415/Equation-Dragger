@@ -69,13 +69,13 @@ public class Settings implements Screen {
         checkBoxStyle.checkboxOff = crispy.getDrawable("checkbox");
         disableSplash = new CheckBox("Disable splash screens", checkBoxStyle);
         instructional = new CheckBox("Disable main menu instructional on launch", checkBoxStyle);
-        if (player.getSplash()) {
+        if (!player.getSplash()) {
             disableSplash.setChecked(true);
         }
         else {
             disableSplash.setChecked(false);
         }
-        if (player.getInstructional()) {
+        if (!player.getInstructional()) {
             instructional.setChecked(true);
         }
         else {
@@ -128,7 +128,7 @@ public class Settings implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (disableSplash.isChecked()) {
+                if (!disableSplash.isChecked()) {
                     player.setSplash(false);
                 }
                 else {
@@ -150,7 +150,7 @@ public class Settings implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (instructional.isChecked()) {
+                if (!instructional.isChecked()) {
                     player.setInstructional(false);
                 }
                 else {

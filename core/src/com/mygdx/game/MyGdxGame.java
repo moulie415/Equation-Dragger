@@ -46,7 +46,7 @@ public class MyGdxGame extends Game {
 		}
 
 		player.setInstructionalCount(0);
-		if (player.getSplash()) {
+		if (!player.getSplash()) {
 			game.setScreen(new MainMenu(game,player));
 		}
 		else {
