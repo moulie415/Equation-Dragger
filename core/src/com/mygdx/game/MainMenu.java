@@ -26,12 +26,14 @@ public class MainMenu implements Screen {
     private Stage stage;
     private BitmapFont font;
     private TextureAtlas buttonAtlas;
+    private TextureAtlas settingsAtlas;
     private TextButton.TextButtonStyle buttonStyle;
-
+    private Button.ButtonStyle settingsStyle;
     private TextButton start;
     private TextButton tutorial;
     private TextButton stats;
     private TextButton about;
+    private Button settings;
     private Label title;
     private Label.LabelStyle style;
     private Skin skin;
@@ -88,6 +90,19 @@ public class MainMenu implements Screen {
         //buttonStyle.font = skin.getFont("font");
         buttonStyle.font = font;
 
+        settingsAtlas = new TextureAtlas(Gdx.files.internal("buttons/settings.pack"));
+        skin.addRegions(settingsAtlas);
+
+        settingsStyle = new Button.ButtonStyle();
+        settingsStyle.up = skin.getDrawable("settings");
+        settingsStyle.down = skin.getDrawable("settings");
+        settingsStyle.checked = skin.getDrawable("settings");
+
+        settings = new Button(settingsStyle);
+        settings.setSize(75,75);
+        settings.setPosition(1100,625);
+
+
         start = new TextButton("START", buttonStyle);
         start.setSize(350,100);
 
@@ -100,7 +115,7 @@ public class MainMenu implements Screen {
         about = new TextButton("ABOUT", buttonStyle);
         about.setSize(350,100);
 
-        title.setPosition(300, 650);
+        title.setPosition(300, 625);
         start.setPosition(500, 500 );
         tutorial.setPosition(500, 350);
         stats.setPosition(500, 200);
@@ -111,6 +126,7 @@ public class MainMenu implements Screen {
         stage.addActor(tutorial);
         stage.addActor(stats);
         stage.addActor(about);
+        stage.addActor(settings);
 
 
         start.addListener(new InputListener(){
@@ -164,10 +180,22 @@ public class MainMenu implements Screen {
             }
         });
 
-        if (!player.getInstructional()) {
+        settings.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                daniel.dispose();
+                game.setScreen(new Settings(game, player));
+
+                return true;
+            }
+        });
+
+        if (!player.getInstructional() && player.getInstructionalCount() != 1) {
             daniel.play();
+            player.setInstructionalCount(1);
         }
-        player.setInstructional(true);
     }
 
     @Override
@@ -206,16 +234,16 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        click.dispose();
-        daniel.dispose();
-
         try {
             player.savePlayer(player);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        stage.dispose();
+        click.dispose();
+        daniel.dispose();
+
 
     }
 }

@@ -4,7 +4,6 @@ package com.mygdx.game;
 
 
 /*
-TODO add music/sounds
 TODO elements to implement, points,badges, stats and leaderboards (if possible)
  */
 
@@ -45,8 +44,8 @@ public class MyGdxGame extends Game {
 			}
 			System.out.println("Player Does Not Exist, Creating Player and Saving Player");
 		}
-		//game.setScreen(new MainMenu(game, player));
-		player.setInstructional(false);
+
+		player.setInstructionalCount(0);
 		if (player.getSplash()) {
 			game.setScreen(new MainMenu(game,player));
 		}

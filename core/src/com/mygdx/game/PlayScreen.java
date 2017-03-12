@@ -300,6 +300,12 @@ public class PlayScreen implements Screen {
                 click.play();
                 countdown.dispose();
                 System.out.println("closed");
+                try {
+                    player.savePlayer(player);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -372,19 +378,18 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        click.dispose();
-        wrong.dispose();
-        countdown.dispose();
-        correct.dispose();
-        smokeWeed.dispose();
         try {
             player.savePlayer(player);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-
+        stage.dispose();
+        click.dispose();
+        wrong.dispose();
+        countdown.dispose();
+        correct.dispose();
+        smokeWeed.dispose();
     }
 
     public void incAttempts() {

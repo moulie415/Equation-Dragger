@@ -21,8 +21,9 @@ public class Player implements Serializable {
     private int section1Points;
     private int section2Points;
     private int section3Points;
-    private boolean instructional = false;
-    private boolean splash = false;
+    private boolean instructional = true;
+    private boolean splash = true;
+    private int instructionalCount = 0;
 
 
     public Player() {
@@ -168,6 +169,7 @@ public class Player implements Serializable {
             if (out != null) try{out.close();} catch (Exception ex) {}
         }
         System.out.println("Saving Player");
+
     }
 
     public static Player readPlayer() throws IOException, ClassNotFoundException {
@@ -247,6 +249,14 @@ public class Player implements Serializable {
 
     public boolean getSplash() {
         return splash;
+    }
+
+    public int getInstructionalCount() {
+        return instructionalCount;
+    }
+
+    public void setInstructionalCount(int number) {
+        instructionalCount = number;
     }
 
 }
