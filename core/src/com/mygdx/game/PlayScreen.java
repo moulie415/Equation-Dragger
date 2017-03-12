@@ -375,7 +375,7 @@ public class PlayScreen implements Screen {
         points.setText("Points: " + Integer.toString(player.getPoints(1)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(1) >= 200 && !player.getSection(2)) {
+        if (player.getPoints(1) >= 200 && !player.getSection(1)) {
             player.completeSection(1);
             dialog.show(stage);
 
