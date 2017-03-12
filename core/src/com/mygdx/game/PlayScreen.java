@@ -294,6 +294,12 @@ public class PlayScreen implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                try {
+                    player.savePlayer(player);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
                 click.play();
                 countdown.dispose();
                 System.out.println("closed");
@@ -369,17 +375,17 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        click.dispose();
-        wrong.dispose();
-        countdown.dispose();
-        correct.dispose();
         try {
             player.savePlayer(player);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        stage.dispose();
+        click.dispose();
+        wrong.dispose();
+        countdown.dispose();
+        correct.dispose();
 
     }
 
@@ -393,7 +399,7 @@ public class PlayScreen implements Screen {
         points.setText("Points: " + Integer.toString(player.getPoints(1)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
         timeBonus.setVisible(true);
-        if (player.getPoints(1) >= 200 && !player.getSection(2)) {
+        if (player.getPoints(1) >= 200 && !player.getSection(1)) {
             player.completeSection(1);
             dialog.show(stage);
 

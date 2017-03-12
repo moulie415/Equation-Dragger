@@ -173,15 +173,15 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        click.dispose();
-
         try {
             player.savePlayer(player);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        stage.dispose();
+        click.dispose();
+
 
     }
 }
