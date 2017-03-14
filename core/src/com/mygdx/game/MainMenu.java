@@ -92,9 +92,9 @@ public class MainMenu implements Screen {
 
         title.setPosition(425, 625);
         start.setPosition(500, 500 );
-        tutorial.setPosition(500, 350);
-        stats.setPosition(500, 200);
-        about.setPosition(500, 50);
+        tutorial.setPosition(500, 375);
+        stats.setPosition(500, 250);
+        about.setPosition(500, 125);
 
         stage.addActor(title);
         stage.addActor(start);
