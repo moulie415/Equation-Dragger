@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -64,7 +65,7 @@ public class PlayScreen2 implements Screen {
     private Sound click;
     private Sound correct;
     private Sound wrong;
-    private Sound countdown;
+    private Music countdown;
     private boolean isPlaying = false;
 
 
@@ -74,7 +75,7 @@ public class PlayScreen2 implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
-        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/countdown.wav"));
+        countdown = Gdx.audio.newMusic(Gdx.files.internal("sounds/countdown.wav"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -180,8 +181,6 @@ public class PlayScreen2 implements Screen {
         stage.addActor(instruction);
 
         final Simultaneous simul = new Simultaneous();
-        System.out.println(simul.getX());
-        System.out.println(simul.getY());
 
 
         equation1 = new Label(simul.firstToString(), skin);
@@ -269,7 +268,6 @@ public class PlayScreen2 implements Screen {
         for (String answer : simul.generateAnswers()) {
             final TextButton label = new TextButton(answer, answerStyle);
 
-            //label.setStyle();
 
             label.setSize(100, 100);
             label.setColor(Color.BLACK);
@@ -289,8 +287,6 @@ public class PlayScreen2 implements Screen {
                 public Payload dragStart(InputEvent event, float x, float y, int pointer) {
                     label.setVisible(false);
                     payload.setObject(label);
-                    //System.out.println(label.getText());
-                    //if (label.getText().toString().equals(x.solveEquation())) {
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
                     draggedLabel.setColor(Color.BLACK);
@@ -315,7 +311,7 @@ public class PlayScreen2 implements Screen {
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isYCorrect()) {
                                         correct.play();
-                                        System.out.println("correct");
+                                        countdown.stop();
                                         feedbackWrong.setVisible(false);
                                         feedbackCorrect.setVisible(true);
                                         dragAndDrop.clear();
@@ -327,7 +323,6 @@ public class PlayScreen2 implements Screen {
                                     }
                                     else {
                                         wrong.play();
-                                        System.out.println("false");
                                         feedbackWrong.setVisible(true);
                                         incWrongCount();
                                         x.setText("x = ");
@@ -342,7 +337,6 @@ public class PlayScreen2 implements Screen {
                                 setXCorrect(false);
                                 if (getIsYSet()) {
                                     wrong.play();
-                                    System.out.println("false");
                                     feedbackWrong.setVisible(true);
                                     incWrongCount();
                                     x.setText("x = ");
@@ -352,10 +346,8 @@ public class PlayScreen2 implements Screen {
                                 }
                             }
 
-                            System.out.println("x");
 
                         } else {
-                            System.out.println("y");
                             y.setText("y = " + label.getText());
                             setIsYSet();
                             if (Float.valueOf(label.getText().toString()) == (simul.getY())) {
@@ -366,7 +358,7 @@ public class PlayScreen2 implements Screen {
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isXCorrect()) {
                                         correct.play();
-                                        System.out.println("correct");
+                                        countdown.stop();
                                         feedbackWrong.setVisible(false);
                                         feedbackCorrect.setVisible(true);
                                         dragAndDrop.clear();
@@ -378,7 +370,6 @@ public class PlayScreen2 implements Screen {
                                     }
                                     else {
                                         wrong.play();
-                                        System.out.println("false");
                                         feedbackWrong.setVisible(true);
                                         incWrongCount();
                                         x.setText("x = ");
@@ -393,7 +384,6 @@ public class PlayScreen2 implements Screen {
                                 setYCorrect(false);
                                 if (getIsXSet()) {
                                     wrong.play();
-                                    System.out.println("false");
                                     feedbackWrong.setVisible(true);
                                     incWrongCount();
                                     x.setText("x = ");
@@ -436,8 +426,7 @@ public class PlayScreen2 implements Screen {
                     e.printStackTrace();
                 }
                 click.play();
-                countdown.dispose();
-                System.out.println("closed");
+                countdown.stop();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -448,7 +437,6 @@ public class PlayScreen2 implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                System.out.println("clicked");
 
                 game.setScreen(new PlayScreen2(game, player));
 

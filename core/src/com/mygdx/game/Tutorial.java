@@ -74,7 +74,6 @@ public class Tutorial implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("closed");
                 click.play();
                 game.setScreen(new MainMenu(game, player));
                 return true;

@@ -60,7 +60,6 @@ public class Player implements Serializable {
         else {
             ratio = correct;
         }
-        System.out.println(ratio);
         if (ratio > 0) {
             return round(ratio, 2);
         }
@@ -89,11 +88,11 @@ public class Player implements Serializable {
                     section1Points += timeBonus;
                     break;
                 case 2:
-                    section2Points += 20;
+                    section2Points += 30;
                     section2Points += timeBonus;
                     break;
                 case 3:
-                    section3Points += 20;
+                    section3Points += 40;
                     section3Points += timeBonus;
                     break;
                 default:

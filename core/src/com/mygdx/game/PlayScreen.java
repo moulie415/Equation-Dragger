@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -57,7 +58,7 @@ public class PlayScreen implements Screen {
     private Sound click;
     private Sound correct;
     private Sound wrong;
-    private Sound countdown;
+    private Music countdown;
     private boolean isPlaying = false;
 
     public PlayScreen(Game game, Player player) {
@@ -67,7 +68,7 @@ public class PlayScreen implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/correct.wav"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/wrong.wav"));
-        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/countdown.wav"));
+        countdown = Gdx.audio.newMusic(Gdx.files.internal("sounds/countdown.wav"));
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
 
@@ -175,12 +176,8 @@ public class PlayScreen implements Screen {
 
         final Equation equation1 = new Equation();
 
-        //final Label equation = new Label(equation1.equationString(), skin);
         final TextButton equation = new TextButton(equation1.equationString(), equationStyle);
 
-
-        //Color myOrange = new Color(0xff6600ff);
-       // equation.setColor(new Color(0xffffffff));
 
         Table table = new Table();
 
@@ -234,8 +231,6 @@ public class PlayScreen implements Screen {
                 public Payload dragStart(InputEvent event, float x, float y, int pointer) {
                     label.setVisible(false);
                     payload.setObject(label);
-                    //System.out.println(label.getText());
-                    //if (label.getText().toString().equals(equation1.solveEquation())) {
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
                     draggedLabel.setColor(Color.BLACK);
@@ -247,8 +242,6 @@ public class PlayScreen implements Screen {
 
                 @Override
                 public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-                    System.out.println(target);
-                    System.out.println(label.getText());
 
                     if (target != null) {
                         attemptsCount +=1;
@@ -256,7 +249,7 @@ public class PlayScreen implements Screen {
                         attempts.setText("attempts: " + attemptsCount);
                         if (label.getText().toString().equals(equation1.solveEquation())) {
                             correct.play();
-                            System.out.println("correct");
+                            countdown.stop();
                             feedback.setColor(Color.GREEN);
                             feedback.setText("correct!");
                             dragAndDrop.clear();
@@ -267,7 +260,6 @@ public class PlayScreen implements Screen {
 
                         } else {
                             wrong.play();
-                            System.out.println("false");
                             feedback.setColor(Color.RED);
                             feedback.setText("wrong, try again");
                             incWrongCount();
@@ -301,8 +293,7 @@ public class PlayScreen implements Screen {
                     e.printStackTrace();
                 }
                 click.play();
-                countdown.dispose();
-                System.out.println("closed");
+                countdown.stop();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -313,7 +304,6 @@ public class PlayScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                System.out.println("clicked");
 
                 game.setScreen(new PlayScreen(game, player));
 

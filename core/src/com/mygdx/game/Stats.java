@@ -105,7 +105,6 @@ public class Stats implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                System.out.println("closed");
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }

@@ -38,6 +38,8 @@ public class MainMenu implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
+    private Label title;
+    private Label.LabelStyle style;
 
     public MainMenu(Game game, Player player ) {
         this.game = game;
@@ -57,6 +59,11 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
 
+        style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.BLACK;
+
+        title = new Label("Equation Dragger", style);
 
         skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         //buttonAtlas = new TextureAtlas("buttons/button.pack");
@@ -82,11 +89,14 @@ public class MainMenu implements Screen {
         about = new TextButton("ABOUT", buttonStyle);
         about.setSize(350,100);
 
-        start.setPosition(500, 550 );
-        tutorial.setPosition(500, 400);
-        stats.setPosition(500, 250);
-        about.setPosition(500, 100);
 
+        title.setPosition(425, 625);
+        start.setPosition(500, 500 );
+        tutorial.setPosition(500, 350);
+        stats.setPosition(500, 200);
+        about.setPosition(500, 50);
+
+        stage.addActor(title);
         stage.addActor(start);
         stage.addActor(tutorial);
         stage.addActor(stats);
