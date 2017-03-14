@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -39,7 +40,7 @@ public class Stats implements Screen {
     private int VIRTUAL_WIDTH;
     private int VIRTUAL_HEIGHT;
     private Sound click;
-    private Sound never;
+    private Music never;
 
     public Stats(Game game, Player player) {
         this.game = game;
@@ -53,7 +54,7 @@ public class Stats implements Screen {
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        never = Gdx.audio.newSound(Gdx.files.internal("sounds/never_done_that.mp3"));
+        never = Gdx.audio.newMusic(Gdx.files.internal("sounds/never_done_that.mp3"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         style = new Label.LabelStyle(font, Color.BLACK);
 

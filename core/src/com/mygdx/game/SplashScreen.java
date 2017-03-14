@@ -6,11 +6,18 @@ import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import static com.sun.webkit.graphics.GraphicsDecoder.SCALE;
 
@@ -24,28 +31,55 @@ public class SplashScreen implements Screen {
     private Sprite splash2;
     private Sprite splash3;
     private Sprite splash4;
+    private Skin skin;
+    private Button skip;
+    private TextureAtlas buttonAtlas;
+    private Button.ButtonStyle style;
     private TweenManager tweenManager;
     private Game game;
     private Player player;
-    private Sound music;
+    private Music music;
+    private Sound click;
+    private Stage stage;
 
     public SplashScreen(Game game, Player player) {
         this.game = game;
         this.player = player;
-        music = Gdx.audio.newSound(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        stage = new Stage();
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
+        skin = new Skin();
+        buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/skip.atlas"));
+        skin.addRegions(buttonAtlas);
+
+        style =  new Button.ButtonStyle();
+        style.up = skin.getDrawable("skip");
+        style.down = skin.getDrawable("skip");
+        style.over = skin.getDrawable("skip");
+
+
+
+        skip = new Button(style);
+        skip.setSize(50, 50);
+        skip.setPosition(1100, 50);
+        stage.addActor(skip);
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.input.setInputProcessor(stage);
 
         batch.begin();
         splash.draw(batch);
         splash2.draw(batch);
         splash3.draw(batch);
         splash4.draw(batch);
+
         batch.end();
+        stage.draw();
 
         tweenManager.update(delta);
     }
@@ -91,6 +125,17 @@ public class SplashScreen implements Screen {
             }
         });    // and finally start it!*/
         tweenManager.update(Float.MIN_VALUE); // update once avoid short flash of splash before animation
+        skip.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                game.setScreen(new MainMenu(game, player));
+
+
+                return true;
+            }
+        });
 
     }
 
@@ -110,6 +155,8 @@ public class SplashScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        click.dispose();
+        music.dispose();
         splash.getTexture().dispose();
     }
 

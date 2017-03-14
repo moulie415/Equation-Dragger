@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -65,7 +66,7 @@ public class PlayScreen3 implements Screen {
     private Sound click;
     private Sound correct;
     private Sound wrong;
-    private Sound countdown;
+    private Music countdown;
     private Sound smokeWeed;
     private boolean isPlaying = false;
 
@@ -77,7 +78,7 @@ public class PlayScreen3 implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
         correct = Gdx.audio.newSound(Gdx.files.internal("sounds/intervention.mp3"));
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/2SED4AIRHORN_short.mp3"));
-        countdown = Gdx.audio.newSound(Gdx.files.internal("sounds/tactical_nuke.mp3"));
+        countdown = Gdx.audio.newMusic(Gdx.files.internal("sounds/tactical_nuke.mp3"));
         smokeWeed = Gdx.audio.newSound(Gdx.files.internal("sounds/smoke_weed.mp3"));
 
         VIRTUAL_WIDTH = 1280;
