@@ -118,11 +118,21 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	}
 
 	@Override
-	public void submitScore(long score) {
+	public void submitScore(long score, String leaderboard) {
 		if (isSignedIn())
 		{
-			Games.Leaderboards.submitScore(_gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
+			if (leaderboard.equals("points")) {
+				Games.Leaderboards.submitScore(_gameHelper.getApiClient(), getString(R.string.points_id), score);
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.points_id)), REQUEST_CODE_UNUSED);
+			}
+			else if (leaderboard.equals("ratio")) {
+				Games.Leaderboards.submitScore(_gameHelper.getApiClient(), getString(R.string.ratio_id), score);
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.ratio_id)), REQUEST_CODE_UNUSED);
+
+			}
+			else {
+				System.out.println("invalid leaderboard string");
+			}
 		}
 		else
 		{
@@ -131,10 +141,21 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	}
 
 	@Override
-	public void showScores() {
+	public void showScores(String leaderboard) {
 		if (isSignedIn())
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
+			if (leaderboard.equals("points")) {
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.points_id)), REQUEST_CODE_UNUSED);
+			}
+			else if (leaderboard.equals("ratio")) {
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.ratio_id)), REQUEST_CODE_UNUSED);
+
+			}
+			else {
+				System.out.println("invalid leaderboard string");
+
+			}
 		else
+
 		{
 // Maybe sign in here then redirect to showing scores?
 		}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_id">367186831873</string>
-    <string name="leaderboard_id">CgkIgdSp8NcKEAIQAA</string>
+    <string name="points_id">CgkIgdSp8NcKEAIQAA</string>
+    <string name="ratio_id">CgkIgdSp8NcKEAIQAQ</string>
 
 </resources>

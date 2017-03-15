@@ -4,7 +4,6 @@ package com.mygdx.game;
 
 
 /*
-TODO add music/sounds
 TODO elements to implement, points,badges, stats and leaderboards (if possible)
  */
 

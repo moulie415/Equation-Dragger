@@ -101,17 +101,11 @@ public class SectionScreen implements Screen {
         if (!player.getSection(1)) {
             section2.setColor(Color.GRAY);
             pointsNeeded2.setVisible(true);
-            //section2.setWidth(1200);
-            //String points = Integer.toString(player.getPoints(1)) + "/200 points";
-            //section2.setText("Section 2: Simultaneous Equations " + points);
         }
         section3.setPosition(50, 300);
         if (!player.getSection(2)) {
             section3.setColor(Color.GRAY);
             pointsNeeded3.setVisible(true);
-           // section3.setWidth(1200);
-            //String points = Integer.toString(player.getPoints(2)) + "/300 points";
-            //section3.setText("Section 3: Quadratic Equations " + points);
         }
 
         stage.addActor(section1);

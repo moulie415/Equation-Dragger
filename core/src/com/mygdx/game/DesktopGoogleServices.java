@@ -24,13 +24,13 @@ public class DesktopGoogleServices implements IGoogleServices
     }
 
     @Override
-    public void submitScore(long score)
+    public void submitScore(long score, String leaderboard)
     {
         System.out.println("DesktopGoogleServies: submitScore(" + score + ")");
     }
 
     @Override
-    public void showScores()
+    public void showScores(String leaderboard)
     {
         System.out.println("DesktopGoogleServies: showScores()");
     }

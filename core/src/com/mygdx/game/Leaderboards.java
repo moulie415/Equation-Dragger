@@ -11,89 +11,59 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 /**
- * Created by henrymoule on 01/03/2017.
+ * Created by henrymoule on 15/03/2017.
  */
-public class Stats implements Screen {
-    private Player player;
+public class Leaderboards implements Screen {
     private Game game;
-    private Label stats;
-    private Label attempts;
-    private Label correct;
-    private Label wrong;
-    private Label ratio;
-    private Label totalPoints;
-    private Skin crispy;
+    private Player player;
+    private TextButton.TextButtonStyle style;
+    private TextButton points;
+    private TextButton ratio;
     private Button close;
-    private Label.LabelStyle style;
     private Button.ButtonStyle buttonStyle;
-    private TextButton leaderboards;
-    private TextButton.TextButtonStyle leaderBoardStyle;
-    private BitmapFont font;
-    private Stage stage;
-    private Viewport viewport;
-    private int VIRTUAL_WIDTH;
-    private int VIRTUAL_HEIGHT;
     private Sound click;
+    private int VIRTUAL_WIDTH, VIRTUAL_HEIGHT;
+    private Skin crispy;
+    private StretchViewport viewport;
+    private Stage stage;
+    private BitmapFont font;
 
-    public Stats(Game game, Player player) {
+
+
+    public Leaderboards(Game game, Player player) {
         this.game = game;
         this.player = player;
 
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
+
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
+
         //camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here! (camera taken out)
+        viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here!
         stage = new Stage(viewport);
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
-        click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        style = new Label.LabelStyle(font, Color.BLACK);
+        font.setColor(Color.BLACK);
+        style = new TextButton.TextButtonStyle();
+        style.up = crispy.getDrawable("button");
+        style.over = crispy.getDrawable("button-over");
+        style.down = crispy.getDrawable("button-pressed");
+        style.font = font;
 
-        leaderBoardStyle = new TextButton.TextButtonStyle();
-        leaderBoardStyle.up = crispy.getDrawable("button");
-        leaderBoardStyle.over = crispy.getDrawable("button-over");
-        leaderBoardStyle.down = crispy.getDrawable("button-pressed");
-        leaderBoardStyle.font = font;
-
-        leaderboards = new TextButton("Leaderboards", leaderBoardStyle);
-        leaderboards.setPosition(400, 500);
-        stage.addActor(leaderboards);
-        stats = new Label("YOUR STATS:", style);
-        stats.setPosition(400, 600);
-
-        stage.addActor(stats);
-
-        attempts = new Label("Attempts: " + player.getAttempts(), style);
-        attempts.setPosition(400, 425);
-        stage.addActor(attempts);
-
-
-        correct = new Label("Correct answers: " + player.getCorrectCount(), style);
-        correct.setPosition(400,  350);
-        stage.addActor(correct);
-
-
-        wrong = new Label("Wrong answers: " + player.getWrongCount(), style);
-        wrong.setPosition(400, 275);
-        stage.addActor(wrong);
-
-        ratio = new Label("Ratio: " + player.getRatio(), style);
-        ratio.setPosition(400, 200);
+        points = new TextButton("Total points", style);
+        points.setPosition(200, 500);
+        stage.addActor(points);
+        ratio = new TextButton("Best ratio", style);
+        ratio.setPosition(200, 400);
         stage.addActor(ratio);
-
-        totalPoints = new Label("Total points: " + (player.getPoints(1)+player.getPoints(2)
-                +player.getPoints(3)), style);
-        totalPoints.setPosition(400, 125);
-        stage.addActor(totalPoints);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -112,38 +82,71 @@ public class Stats implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+
         close.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                game.setScreen(new MainMenu(game, player));
+                game.setScreen(new Stats(game, player));
                 return true;
             }
+
         });
-        leaderboards.addListener(new InputListener(){
+        points.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
-                game.setScreen(new Leaderboards(game, player));
+                if (MyGdxGame.googleServices.isSignedIn()) {
+                    System.out.println("Already signed in");
+                    MyGdxGame.googleServices.submitScore(player.getTotalPoints(), "points");
+                    MyGdxGame.googleServices.showScores("points");
 
+                }
+                else {
+                    MyGdxGame.googleServices.signIn();
+                    MyGdxGame.googleServices.submitScore(player.getTotalPoints(), "points");
+                }
                 return true;
             }
+
         });
+        ratio.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                if (MyGdxGame.googleServices.isSignedIn()) {
+                    System.out.println("Already signed in");
+                    MyGdxGame.googleServices.submitScore((long)player.getRatio(), "ratio");
+                    MyGdxGame.googleServices.showScores("ratio");
+
+                }
+                else {
+                    MyGdxGame.googleServices.signIn();
+                    MyGdxGame.googleServices.submitScore((long)player.getRatio(), "ratio");
+                }
+                return true;
+            }
+
+        });
+
     }
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, false);
+        stage.getViewport().update(width,height,false);
+
     }
 
     @Override
