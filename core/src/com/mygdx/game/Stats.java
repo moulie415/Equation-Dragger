@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -33,6 +34,8 @@ public class Stats implements Screen {
     private Button close;
     private Label.LabelStyle style;
     private Button.ButtonStyle buttonStyle;
+    private TextButton leaderboards;
+    private TextButton.TextButtonStyle leaderBoardStyle;
     private BitmapFont font;
     private Stage stage;
     private Viewport viewport;
@@ -55,23 +58,32 @@ public class Stats implements Screen {
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
+        leaderBoardStyle = new TextButton.TextButtonStyle();
+        leaderBoardStyle.up = crispy.getDrawable("button");
+        leaderBoardStyle.over = crispy.getDrawable("button-over");
+        leaderBoardStyle.down = crispy.getDrawable("button-pressed");
+        leaderBoardStyle.font = font;
+
+        leaderboards = new TextButton("Leader Boards", leaderBoardStyle);
+        leaderboards.setPosition(400, 500);
+        stage.addActor(leaderboards);
         stats = new Label("YOUR STATS:", style);
         stats.setPosition(400, 600);
 
         stage.addActor(stats);
 
         attempts = new Label("Attempts: " + player.getAttempts(), style);
-        attempts.setPosition(400, 500);
+        attempts.setPosition(400, 425);
         stage.addActor(attempts);
 
 
         correct = new Label("Correct answers: " + player.getCorrectCount(), style);
-        correct.setPosition(400, 400);
+        correct.setPosition(400,  350);
         stage.addActor(correct);
 
 
         wrong = new Label("Wrong answers: " + player.getWrongCount(), style);
-        wrong.setPosition(400, 300);
+        wrong.setPosition(400, 275);
         stage.addActor(wrong);
 
         ratio = new Label("Ratio: " + player.getRatio(), style);
@@ -80,7 +92,7 @@ public class Stats implements Screen {
 
         totalPoints = new Label("Total points: " + (player.getPoints(1)+player.getPoints(2)
                 +player.getPoints(3)), style);
-        totalPoints.setPosition(400, 100);
+        totalPoints.setPosition(400, 125);
         stage.addActor(totalPoints);
 
         buttonStyle = new Button.ButtonStyle();
@@ -106,6 +118,24 @@ public class Stats implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
                 game.setScreen(new MainMenu(game, player));
+                return true;
+            }
+        });
+        leaderboards.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                if (MyGdxGame.googleServices.isSignedIn()) {
+                    System.out.println("Already signed in");
+                    MyGdxGame.googleServices.submitScore(player.getTotalPoints());
+                    MyGdxGame.googleServices.showScores();
+
+                }
+                else {
+                    MyGdxGame.googleServices.signIn();
+                    MyGdxGame.googleServices.submitScore(player.getTotalPoints());
+                }
                 return true;
             }
         });

@@ -150,6 +150,10 @@ public class Player implements Serializable {
         return points;
     }
 
+    public int getTotalPoints() {
+        return section1Points + section2Points + section3Points;
+    }
+
 
 
     public static void savePlayer(Player player) throws IOException {

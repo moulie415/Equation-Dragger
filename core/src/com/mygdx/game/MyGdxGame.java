@@ -18,7 +18,12 @@ public class MyGdxGame extends Game {
 
 	private Game game;
 	private Player player;
+	public static IGoogleServices googleServices;
 
+	public MyGdxGame(IGoogleServices googleServices) {
+		super();
+		MyGdxGame.googleServices = googleServices;
+	}
 
 	@Override
 	public void create ()  {

@@ -472,6 +472,7 @@ public class PlayScreen3 implements Screen {
                 click.play();
                 countdown.stop();
                 game.setScreen(new MainMenu(game, player));
+                MyGdxGame.googleServices.submitScore(player.getTotalPoints());
                 return true;
             }
         });
