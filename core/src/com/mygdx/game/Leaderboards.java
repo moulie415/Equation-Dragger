@@ -25,6 +25,7 @@ public class Leaderboards implements Screen {
     private TextButton.TextButtonStyle style;
     private TextButton points;
     private TextButton ratio;
+    private TextButton streak;
     private Button close;
     private Button.ButtonStyle buttonStyle;
     private Sound click;
@@ -64,6 +65,9 @@ public class Leaderboards implements Screen {
         ratio = new TextButton("Best ratio", style);
         ratio.setPosition(200, 400);
         stage.addActor(ratio);
+        streak = new TextButton("Best streak", style);
+        streak.setPosition(200, 300);
+        stage.addActor(streak);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -126,6 +130,25 @@ public class Leaderboards implements Screen {
                 else {
                     MyGdxGame.googleServices.signIn();
                     MyGdxGame.googleServices.submitScore((long)player.getRatio(), "ratio");
+                }
+                return true;
+            }
+
+        });
+        streak.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                if (MyGdxGame.googleServices.isSignedIn()) {
+                    System.out.println("Already signed in");
+                    MyGdxGame.googleServices.submitScore(player.getBestStreak(), "streak");
+                    MyGdxGame.googleServices.showScores("streak");
+
+                }
+                else {
+                    MyGdxGame.googleServices.signIn();
+                    MyGdxGame.googleServices.submitScore(player.getBestStreak(), "streak");
                 }
                 return true;
             }

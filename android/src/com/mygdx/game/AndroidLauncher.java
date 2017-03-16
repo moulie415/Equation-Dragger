@@ -130,6 +130,11 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.ratio_id)), REQUEST_CODE_UNUSED);
 
 			}
+			else if (leaderboard.equals("streak")) {
+				Games.Leaderboards.submitScore(_gameHelper.getApiClient(), getString(R.string.streak_id), score);
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.streak_id)), REQUEST_CODE_UNUSED);
+
+			}
 			else {
 				System.out.println("invalid leaderboard string");
 			}
@@ -148,6 +153,10 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 			}
 			else if (leaderboard.equals("ratio")) {
 				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.ratio_id)), REQUEST_CODE_UNUSED);
+
+			}
+			else if (leaderboard.equals("streak")) {
+				startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_gameHelper.getApiClient(), getString(R.string.streak_id)), REQUEST_CODE_UNUSED);
 
 			}
 			else {

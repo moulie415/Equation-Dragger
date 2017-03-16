@@ -21,6 +21,8 @@ public class Player implements Serializable {
     private int section1Points;
     private int section2Points;
     private int section3Points;
+    private int currentStreak;
+    private int bestStreak;
 
 
     public Player() {
@@ -36,6 +38,8 @@ public class Player implements Serializable {
         section1Points = 0;
         section2Points = 0;
         section3Points = 0;
+        currentStreak = 0;
+        bestStreak = 0;
     }
 
     public int getAttempts() {
@@ -233,6 +237,28 @@ public class Player implements Serializable {
                 section = false;
         }
         return section;
+    }
+
+    public int getCurrentStreak() {
+        return currentStreak;
+    }
+    public int getBestStreak() {
+        return bestStreak;
+    }
+
+    public void resetCurrentStreak(){
+        currentStreak = 0;
+    }
+
+    public void incCurrentStreak() {
+        currentStreak++;
+        setBestStreak();
+    }
+
+    public void setBestStreak() {
+        if (currentStreak > bestStreak) {
+            bestStreak = currentStreak;
+        }
     }
 
 }

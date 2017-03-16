@@ -49,6 +49,7 @@ public class PlayScreen2 implements Screen {
     private Label instruction;
     private Label points;
     private Label timeBonus;
+    private Label streak;
     private Label equation1;
     private Label equation2;
     private int attemptsCount;
@@ -156,9 +157,14 @@ public class PlayScreen2 implements Screen {
         points.setPosition(400, 630);
         points.setColor(Color.BLACK);
 
+        streak = new Label("streak: " + player.getCurrentStreak(), skin);
+        streak.setFontScale((float) 0.5);
+        streak.setPosition(600, 630);
+        streak.setColor(Color.BLACK);
+
         timeBonus = new Label("placeholder text", skin);
         timeBonus.setFontScale((float) 0.5);
-        timeBonus.setPosition(600, 630);
+        timeBonus.setPosition(750, 630);
         timeBonus.setColor(Color.BLACK);
         timeBonus.setVisible(false);
 
@@ -179,6 +185,7 @@ public class PlayScreen2 implements Screen {
         stage.addActor(timeBonus);
         stage.addActor(next);
         stage.addActor(instruction);
+        stage.addActor(streak);
 
         final Simultaneous simul = new Simultaneous();
 
@@ -427,6 +434,7 @@ public class PlayScreen2 implements Screen {
                 }
                 click.play();
                 countdown.stop();
+                player.resetCurrentStreak();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -509,6 +517,7 @@ public class PlayScreen2 implements Screen {
         correct.dispose();
         wrong.dispose();
         countdown.dispose();
+        player.resetCurrentStreak();
 
     }
 
@@ -517,10 +526,12 @@ public class PlayScreen2 implements Screen {
     }
 
     public void incCorrectCount() {
+        player.incCurrentStreak();
         player.incCorrectCount();
         player.incPoints(2, timer);
         points.setText("Points: " + Integer.toString(player.getPoints(2)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
+        streak.setText("streak: " + player.getCurrentStreak());
         timeBonus.setVisible(true);
         if (player.getPoints(2) >= 300 && !player.getSection(2)) {
             player.completeSection(2);
@@ -530,9 +541,11 @@ public class PlayScreen2 implements Screen {
     }
 
     public void incWrongCount() {
+        player.resetCurrentStreak();
         player.incWrongCount();
         player.decPoints(2);
         points.setText("Points: " + Integer.toString(player.getPoints(2)));
+        streak.setText("streak: " + player.getCurrentStreak());
     }
 
     public void setIsXSet() {

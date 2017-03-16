@@ -30,6 +30,7 @@ public class Stats implements Screen {
     private Label wrong;
     private Label ratio;
     private Label totalPoints;
+    private Label bestStreak;
     private Skin crispy;
     private Button close;
     private Label.LabelStyle style;
@@ -65,35 +66,40 @@ public class Stats implements Screen {
         leaderBoardStyle.font = font;
 
         leaderboards = new TextButton("Leaderboards", leaderBoardStyle);
-        leaderboards.setPosition(400, 500);
+        leaderboards.setPosition(400, 550);
         stage.addActor(leaderboards);
         stats = new Label("YOUR STATS:", style);
-        stats.setPosition(400, 600);
+        stats.setPosition(400, 625);
 
         stage.addActor(stats);
 
         attempts = new Label("Attempts: " + player.getAttempts(), style);
-        attempts.setPosition(400, 425);
+        attempts.setPosition(400, 475);
         stage.addActor(attempts);
 
 
         correct = new Label("Correct answers: " + player.getCorrectCount(), style);
-        correct.setPosition(400,  350);
+        correct.setPosition(400,  400);
         stage.addActor(correct);
 
 
         wrong = new Label("Wrong answers: " + player.getWrongCount(), style);
-        wrong.setPosition(400, 275);
+        wrong.setPosition(400, 325);
         stage.addActor(wrong);
 
         ratio = new Label("Ratio: " + player.getRatio(), style);
-        ratio.setPosition(400, 200);
+        ratio.setPosition(400, 250);
         stage.addActor(ratio);
 
-        totalPoints = new Label("Total points: " + (player.getPoints(1)+player.getPoints(2)
-                +player.getPoints(3)), style);
-        totalPoints.setPosition(400, 125);
+        totalPoints = new Label("Total points: " + player.getTotalPoints(), style);
+        totalPoints.setPosition(400, 175);
         stage.addActor(totalPoints);
+
+        bestStreak = new Label("Best streak: " + player.getBestStreak(), style);
+        bestStreak.setPosition(400, 100);
+        stage.addActor(bestStreak);
+
+
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");

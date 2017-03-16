@@ -50,6 +50,7 @@ public class PlayScreen3 implements Screen {
     private Label instruction;
     private Label points;
     private Label timeBonus;
+    private Label streak;
     private Table equation;
     private Label onlyOneRoot;
     private int attemptsCount;
@@ -163,6 +164,11 @@ public class PlayScreen3 implements Screen {
         timeBonus.setColor(Color.BLACK);
         timeBonus.setVisible(false);
 
+        streak = new Label("streak: " + player.getCurrentStreak(), skin);
+        streak.setFontScale((float) 0.5);
+        streak.setPosition(600, 630);
+        streak.setColor(Color.BLACK);
+
         instruction = new Label("Find all roots", skin);
         instruction.setPosition(450, 550);
         instruction.setColor(Color.BLACK);
@@ -183,6 +189,7 @@ public class PlayScreen3 implements Screen {
         stage.addActor(timeBonus);
         stage.addActor(next);
         stage.addActor(instruction);
+        stage.addActor(streak);
 
         final Quadratic quadratic = new Quadratic();
 
@@ -471,6 +478,7 @@ public class PlayScreen3 implements Screen {
                 }
                 click.play();
                 countdown.stop();
+                player.resetCurrentStreak();
                 game.setScreen(new MainMenu(game, player));
                 return true;
             }
@@ -542,17 +550,18 @@ public class PlayScreen3 implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        click.dispose();
-        correct.dispose();
-        wrong.dispose();
-        countdown.dispose();
         try {
             player.savePlayer(player);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        stage.dispose();
+        click.dispose();
+        correct.dispose();
+        wrong.dispose();
+        countdown.dispose();
+        player.resetCurrentStreak();
 
     }
 
@@ -562,9 +571,11 @@ public class PlayScreen3 implements Screen {
 
     public void incCorrectCount() {
         player.incCorrectCount();
+        player.incCurrentStreak();
         player.incPoints(3, timer);
         points.setText("Points: " + Integer.toString(player.getPoints(3)));
         timeBonus.setText("Time Bonus!!! " + "+ " + timer);
+        streak.setText("streak: " + player.getCurrentStreak());
         timeBonus.setVisible(true);
         if (player.getPoints(3) >= 300 && !player.getSection(3)) {
             player.completeSection(3);
@@ -573,8 +584,10 @@ public class PlayScreen3 implements Screen {
     }
 
     public void incWrongCount() {
+        player.resetCurrentStreak();
         player.incWrongCount();
         player.decPoints(3);
+        streak.setText("streak: " + player.getCurrentStreak());
         points.setText("Points: " + Integer.toString(player.getPoints(3)));
     }
 
