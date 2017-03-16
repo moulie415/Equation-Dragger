@@ -23,6 +23,11 @@ public class Player implements Serializable {
     private int section3Points;
     private int currentStreak;
     private int bestStreak;
+    private boolean rookie;
+    private boolean intermediate;
+    private boolean expert;
+    private boolean grinder;
+    private boolean perfectionist;
 
 
     public Player() {
@@ -35,6 +40,11 @@ public class Player implements Serializable {
         section1 = false;
         section2 = false;
         section3 = false;
+        rookie = false;
+        intermediate = false;
+        expert = false;
+        grinder = false;
+        perfectionist = false;
         section1Points = 0;
         section2Points = 0;
         section3Points = 0;
@@ -101,8 +111,16 @@ public class Player implements Serializable {
                     break;
                 default:
                     System.out.println("Invalid section number");
-            }
 
+            }
+            if (getTotalPoints() >= 100 && !rookie) {
+                rookie = true;
+                MyGdxGame.googleServices.unlockAchievement("rookie");
+            }
+            if (getTotalPoints() >= 2000 && !grinder) {
+                grinder = true;
+                MyGdxGame.googleServices.unlockAchievement("grinder");
+            }
     }
 
     public void decPoints(int section) {
@@ -215,8 +233,20 @@ public class Player implements Serializable {
             case 1: section1 = true;
                 break;
             case 2: section2 = true;
+                if (!intermediate) {
+                    intermediate = true;
+                    MyGdxGame.googleServices.unlockAchievement("intermediate");
+                }
                 break;
             case 3: section3 = true;
+                if (!expert) {
+                    expert = true;
+                    MyGdxGame.googleServices.unlockAchievement("expert");
+                }
+                if (!perfectionist && wrongCount == 0) {
+                    perfectionist = true;
+                    MyGdxGame.googleServices.unlockAchievement("perfectionist");
+                }
                 break;
             default:
                 System.out.println("invalid section number");

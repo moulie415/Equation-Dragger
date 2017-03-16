@@ -33,11 +33,13 @@ public class Stats implements Screen {
     private Label bestStreak;
     private Skin crispy;
     private Button close;
-    private Label.LabelStyle style;
+    private Label.LabelStyle style, style2;
     private Button.ButtonStyle buttonStyle;
     private TextButton leaderboards;
     private TextButton.TextButtonStyle leaderBoardStyle;
+    private TextButton achievements;
     private BitmapFont font;
+    private BitmapFont font2;
     private Stage stage;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
@@ -57,7 +59,10 @@ public class Stats implements Screen {
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        style = new Label.LabelStyle(font, Color.BLACK);
+        font2 = new BitmapFont(Gdx.files.internal("small.fnt"), false);
+
+        style = new Label.LabelStyle(font2, Color.BLACK);
+        style2 = new Label.LabelStyle(font, Color.BLACK);
 
         leaderBoardStyle = new TextButton.TextButtonStyle();
         leaderBoardStyle.up = crispy.getDrawable("button");
@@ -66,37 +71,41 @@ public class Stats implements Screen {
         leaderBoardStyle.font = font;
 
         leaderboards = new TextButton("Leaderboards", leaderBoardStyle);
-        leaderboards.setPosition(400, 550);
+        leaderboards.setPosition(100, 500);
         stage.addActor(leaderboards);
-        stats = new Label("YOUR STATS:", style);
+        stats = new Label("YOUR STATS:", style2);
         stats.setPosition(400, 625);
-
         stage.addActor(stats);
 
+
+        achievements = new TextButton("Achievements", leaderBoardStyle);
+        achievements.setPosition(700, 500);
+        stage.addActor(achievements);
+
         attempts = new Label("Attempts: " + player.getAttempts(), style);
-        attempts.setPosition(400, 475);
+        attempts.setPosition(100, 400);
         stage.addActor(attempts);
 
 
         correct = new Label("Correct answers: " + player.getCorrectCount(), style);
-        correct.setPosition(400,  400);
+        correct.setPosition( 700,  400);
         stage.addActor(correct);
 
 
         wrong = new Label("Wrong answers: " + player.getWrongCount(), style);
-        wrong.setPosition(400, 325);
+        wrong.setPosition(100, 300);
         stage.addActor(wrong);
 
         ratio = new Label("Ratio: " + player.getRatio(), style);
-        ratio.setPosition(400, 250);
+        ratio.setPosition(700, 300);
         stage.addActor(ratio);
 
         totalPoints = new Label("Total points: " + player.getTotalPoints(), style);
-        totalPoints.setPosition(400, 175);
+        totalPoints.setPosition(100, 200);
         stage.addActor(totalPoints);
 
         bestStreak = new Label("Best streak: " + player.getBestStreak(), style);
-        bestStreak.setPosition(400, 100);
+        bestStreak.setPosition(700, 200);
         stage.addActor(bestStreak);
 
 
@@ -133,6 +142,23 @@ public class Stats implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 click.play();
                 game.setScreen(new Leaderboards(game, player));
+
+                return true;
+            }
+        });
+         achievements.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                if (MyGdxGame.googleServices.isSignedIn()) {
+                    MyGdxGame.googleServices.showAchievements();
+                }
+                else {
+                    MyGdxGame.googleServices.signIn();
+                    MyGdxGame.googleServices.showAchievements();
+
+                }
 
                 return true;
             }

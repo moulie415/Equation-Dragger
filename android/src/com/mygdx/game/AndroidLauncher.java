@@ -21,6 +21,7 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	private static final String TAG = "AndroidLauncher";
 	private AdView adView;
 	private final static int REQUEST_CODE_UNUSED = 9002;
+	private final static int REQUEST_ACHIEVEMENTS = 9003;
 
 	private GameHelper _gameHelper;
 	@Override
@@ -174,6 +175,41 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	public boolean isSignedIn() {
 		return _gameHelper.isSignedIn();
 	}
+
+	@Override
+	public void unlockAchievement(String achievement) {
+		if (isSignedIn()) {
+			switch (achievement) {
+				case "rookie":
+					Games.Achievements.unlock(_gameHelper.getApiClient(), getString(R.string.rookie_id));
+					break;
+				case "intermediate":
+					Games.Achievements.unlock(_gameHelper.getApiClient(), getString(R.string.intermediate_id));
+					break;
+				case "expert":
+					Games.Achievements.unlock(_gameHelper.getApiClient(), getString(R.string.expert_id));
+					break;
+				case "grinder":
+					Games.Achievements.unlock(_gameHelper.getApiClient(), getString(R.string.grinder_id));
+					break;
+				case "perfectionist":
+					Games.Achievements.unlock(_gameHelper.getApiClient(), getString(R.string.perfectionist_id));
+					break;
+				default:
+					System.out.println("Invalid achievement string");
+					break;
+			}
+		}
+	}
+
+	@Override
+	public void showAchievements() {
+		if (isSignedIn()) {
+			startActivityForResult(Games.Achievements.getAchievementsIntent(_gameHelper.getApiClient()),REQUEST_ACHIEVEMENTS);
+		}
+
+	}
+
 	@Override
 	protected void onStart()
 	{

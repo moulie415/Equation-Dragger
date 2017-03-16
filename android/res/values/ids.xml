@@ -4,6 +4,11 @@
     <string name="points_id">CgkIgdSp8NcKEAIQAA</string>
     <string name="ratio_id">CgkIgdSp8NcKEAIQAQ</string>
     <string name="streak_id">CgkIgdSp8NcKEAIQCQ</string>
+    <string name="rookie_id">CgkIgdSp8NcKEAIQAw</string>
+    <string name="intermediate_id">CgkIgdSp8NcKEAIQBA</string>
+    <string name="expert_id">CgkIgdSp8NcKEAIQBQ</string>
+    <string name="grinder_id">CgkIgdSp8NcKEAIQBg</string>
+    <string name="perfectionist_id">CgkIgdSp8NcKEAIQBw</string>
 
 
 </resources>

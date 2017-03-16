@@ -11,4 +11,7 @@ public interface IGoogleServices
     public void submitScore(long score, String leaderboard);
     public void showScores(String leaderboard);
     public boolean isSignedIn();
+    public void unlockAchievement(String achievement);
+    public void showAchievements();
+
 }
