@@ -225,7 +225,7 @@ public class PlayScreen2 implements Screen {
         table.setPosition(600, 400);
 
         Table answersTable = new Table(skin);
-        answersTable.setPosition(600, 150);
+        answersTable.setPosition(600, 175);
 
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
@@ -278,7 +278,7 @@ public class PlayScreen2 implements Screen {
 
             label.setSize(100, 100);
             label.setColor(Color.BLACK);
-            answersTable.add(label).pad(20);
+            answersTable.add(label).pad(15);
             if (count == 5) {
                 answersTable.row();
 
