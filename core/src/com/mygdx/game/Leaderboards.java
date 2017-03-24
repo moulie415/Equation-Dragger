@@ -52,7 +52,6 @@ public class Leaderboards implements Screen {
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        font.setColor(Color.BLACK);
         style = new TextButton.TextButtonStyle();
         style.up = crispy.getDrawable("button");
         style.over = crispy.getDrawable("button-over");
@@ -60,12 +59,15 @@ public class Leaderboards implements Screen {
         style.font = font;
 
         points = new TextButton("Total points", style);
+        points.setColor(Color.BLUE);
         points.setPosition(200, 500);
         stage.addActor(points);
         ratio = new TextButton("Best ratio", style);
+        ratio.setColor(Color.BLUE);
         ratio.setPosition(200, 400);
         stage.addActor(ratio);
         streak = new TextButton("Best streak", style);
+        streak.setColor(Color.BLUE);
         streak.setPosition(200, 300);
         stage.addActor(streak);
 
@@ -159,7 +161,7 @@ public class Leaderboards implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

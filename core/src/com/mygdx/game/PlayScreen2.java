@@ -33,7 +33,7 @@ public class PlayScreen2 implements Screen {
     private Player player;
     private Skin skin;
     private Skin crispy;
-    private BitmapFont font;
+    private BitmapFont font, digital;
     private float timeCount;
     private int timer;
     private Label timerLabel;
@@ -57,6 +57,7 @@ public class PlayScreen2 implements Screen {
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
+    private Label.LabelStyle style;
     private Boolean isCorrect;
     private boolean isXCorrect = false;
     private boolean isYCorrect = false;
@@ -90,6 +91,7 @@ public class PlayScreen2 implements Screen {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        digital = new BitmapFont(Gdx.files.internal("digital.fnt"), false);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -125,58 +127,41 @@ public class PlayScreen2 implements Screen {
         close.setPosition(50, 650);
 
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 128;
 
-        BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
-
-        Skin test = new Skin();
-
-        test.addRegions(new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
-        test.add("default-font", font12);
-
-        test.load(Gdx.files.internal("digital.json"));
+        style = new Label.LabelStyle();
+        style.font = digital;
 
         timer = 40;
 
-        timerLabel = new Label("40", test);
-        timerLabel.setColor(Color.BLUE);
-        timerLabel.setPosition(1000, 600);
+        timerLabel = new Label("40", style);
+        timerLabel.setColor(Color.GREEN);
+        timerLabel.setPosition(1100, 600);
 
         attemptsCount = 0;
         attempts = new Label("attempts: " + attemptsCount, skin);
         attempts.setFontScale((float) 0.5);
         attempts.setPosition(200, 630);
-        attempts.setColor(Color.BLACK);
 
         points = new Label("Points: " + Integer.toString(player.getPoints(2)), skin);
         points.setFontScale((float) 0.5);
         points.setPosition(400, 630);
-        points.setColor(Color.BLACK);
 
         streak = new Label("streak: " + player.getCurrentStreak(), skin);
         streak.setFontScale((float) 0.5);
         streak.setPosition(600, 630);
-        streak.setColor(Color.BLACK);
 
         timeBonus = new Label("placeholder text", skin);
         timeBonus.setFontScale((float) 0.5);
         timeBonus.setPosition(750, 630);
-        timeBonus.setColor(Color.BLACK);
         timeBonus.setVisible(false);
 
         instruction = new Label("solve for x and y", skin);
         instruction.setPosition(400, 550);
-        instruction.setColor(Color.BLACK);
 
 
         nextLabel = new Label("press for next question", skin);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
-        nextLabel.setColor(Color.BLACK);
 
 
         dialog = new PlayDialog("", skin);
@@ -192,8 +177,6 @@ public class PlayScreen2 implements Screen {
 
         equation1 = new Label(simul.firstToString(), skin);
         equation2 = new Label(simul.secondToString(), skin);
-        equation1.setColor(Color.BLACK);
-        equation2.setColor(Color.BLACK);
 
         final TextButton x = new TextButton("x = ", equationStyle);
         final TextButton y = new TextButton("y = ", equationStyle);
@@ -277,7 +260,7 @@ public class PlayScreen2 implements Screen {
 
 
             label.setSize(100, 100);
-            label.setColor(Color.BLACK);
+            label.setColor(Color.BLUE);
             answersTable.add(label).pad(15);
             if (count == 5) {
                 answersTable.row();
@@ -296,7 +279,7 @@ public class PlayScreen2 implements Screen {
                     payload.setObject(label);
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
-                    draggedLabel.setColor(Color.BLACK);
+                    draggedLabel.setColor(Color.BLUE);
 
                     payload.setDragActor(draggedLabel);
 
@@ -314,7 +297,6 @@ public class PlayScreen2 implements Screen {
                                 setXCorrect(true);
                                 if (getIsYSet()) {
                                     attemptsCount +=1;
-                                    incAttempts();
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isYCorrect()) {
                                         correct.play();
@@ -361,7 +343,6 @@ public class PlayScreen2 implements Screen {
                                 setYCorrect(true);
                                 if (getIsXSet()) {
                                     attemptsCount +=1;
-                                    incAttempts();
                                     attempts.setText("attempts: " + attemptsCount);
                                     if (isXCorrect()) {
                                         correct.play();
@@ -455,7 +436,7 @@ public class PlayScreen2 implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         update(Gdx.graphics.getDeltaTime());
@@ -521,11 +502,9 @@ public class PlayScreen2 implements Screen {
 
     }
 
-    public void incAttempts() {
-        player.incAttempts();
-    }
 
     public void incCorrectCount() {
+        player.incAttempts();
         player.incCurrentStreak();
         player.incCorrectCount();
         player.incPoints(2, timer);
@@ -541,6 +520,7 @@ public class PlayScreen2 implements Screen {
     }
 
     public void incWrongCount() {
+        player.incAttempts();
         player.resetCurrentStreak();
         player.incWrongCount();
         player.decPoints(2);

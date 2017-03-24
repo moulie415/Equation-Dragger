@@ -92,7 +92,7 @@ public class Quadratic {
             part2 = " " + Integer.toString((int)Math.round(coefficientB)) + "x ";
         }
 
-        return renderString(skin, part1 + operator1 + part2 + operator2 + " " + part3 + " = 0", Color.BLACK);
+        return renderString(skin, part1 + operator1 + part2 + operator2 + " " + part3 + " = 0", Color.WHITE);
     }
 
 

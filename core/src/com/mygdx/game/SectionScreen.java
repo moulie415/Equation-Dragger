@@ -55,10 +55,8 @@ public class SectionScreen implements Screen {
 
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
-        font.setColor(Color.BLACK);
 
         font2 = new BitmapFont(Gdx.files.internal("small.fnt"), false);
-        font2.setColor(Color.BLACK);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -83,17 +81,19 @@ public class SectionScreen implements Screen {
         close.setPosition(50, 650);
 
         section1 = new TextButton("Section 1: Simple Equations", sectionStyle);
+        section1.setColor(Color.BLUE);
         section2 = new TextButton("Section 2: Simultaneous Equations", sectionStyle);
+        section2.setColor(Color.BLUE);
         section3 = new TextButton("Section 3: Quadratic Equations", sectionStyle);
+        section3.setColor(Color.BLUE);
 
         labelStyle = new Label.LabelStyle();
         labelStyle.font = font2;
-        labelStyle.fontColor = Color.BLACK;
         pointsNeeded2 = new Label( Integer.toString(player.getPoints(1)) + "/200 points", labelStyle);
-        pointsNeeded2.setPosition(section2.getWidth() + 50, 425);
+        pointsNeeded2.setPosition(section2.getWidth() + 60, 425);
         pointsNeeded2.setVisible(false);
         pointsNeeded3 = new Label( Integer.toString(player.getPoints(2)) + "/300 points", labelStyle);
-        pointsNeeded3.setPosition( section3.getWidth() + 50, 325);
+        pointsNeeded3.setPosition( section3.getWidth() + 60, 325);
         pointsNeeded3.setVisible(false);
 
         section1.setPosition(50, 500);
@@ -183,7 +183,7 @@ public class SectionScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

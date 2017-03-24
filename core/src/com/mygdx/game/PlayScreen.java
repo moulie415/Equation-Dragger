@@ -33,7 +33,7 @@ public class PlayScreen implements Screen {
     private Player player;
     private Skin skin;
     private Skin crispy;
-    private BitmapFont font;
+    private BitmapFont font, digital;
     private float timeCount;
     private int timer;
     private Label timerLabel;
@@ -54,6 +54,7 @@ public class PlayScreen implements Screen {
     private TextButton.TextButtonStyle answerStyle;
     private TextButton.TextButtonStyle nextStyle;
     private TextButton.TextButtonStyle equationStyle;
+    private Label.LabelStyle style;
     private Boolean isCorrect;
     private PlayDialog dialog;
     private Sound click;
@@ -82,6 +83,7 @@ public class PlayScreen implements Screen {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         crispy = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        digital = new BitmapFont(Gdx.files.internal("digital.fnt"), false);
 
         buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = crispy.getDrawable("button-close");
@@ -118,59 +120,42 @@ public class PlayScreen implements Screen {
         close.setPosition(50, 650);
 
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("digital-7.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 128;
-
-        BitmapFont font12 = generator.generateFont(parameter); // font size 64 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
-        Skin test = new Skin();
-
-        test.addRegions(new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
-        test.add("default-font", font12);
-
-        test.load(Gdx.files.internal("digital.json"));
+        style = new Label.LabelStyle();
+        style.font = digital;
 
         timer = 20;
 
-        timerLabel = new Label("20", test);
-        timerLabel.setColor(Color.BLUE);
-        timerLabel.setPosition(1000, 600);
+        timerLabel = new Label("20", style);
+        timerLabel.setColor(Color.GREEN);
+        timerLabel.setPosition(1100, 600);
 
         attemptsCount = 0;
         attempts = new Label("attempts: " + attemptsCount, skin);
         attempts.setFontScale((float) 0.5);
         attempts.setPosition(200, 630);
-        attempts.setColor(Color.BLACK);
 
         streak = new Label("streak: " + player.getCurrentStreak(), skin);
         streak.setFontScale((float) 0.5);
         streak.setPosition(600, 630);
-        streak.setColor(Color.BLACK);
 
 
         points = new Label("Points: " + Integer.toString(player.getPoints(1)), skin);
         points.setFontScale((float) 0.5);
         points.setPosition(400, 630);
-        points.setColor(Color.BLACK);
 
         timeBonus = new Label("placeholder text", skin);
         timeBonus.setFontScale((float) 0.5);
         timeBonus.setPosition(750, 630);
-        timeBonus.setColor(Color.BLACK);
         timeBonus.setVisible(false);
 
         instruction = new Label("solve for x", skin);
         instruction.setPosition(450, 550);
-        instruction.setColor(Color.BLACK);
 
 
         nextLabel = new Label("press for next question", skin);
         nextLabel.setPosition(400,500);
         nextLabel.setFontScale((float)0.5);
         nextLabel.setVisible(false);
-        nextLabel.setColor(Color.BLACK);
 
 
         dialog = new PlayDialog("", skin);
@@ -228,7 +213,7 @@ public class PlayScreen implements Screen {
             //label.setStyle();
 
             label.setSize(100, 100);
-            label.setColor(Color.BLACK);
+            label.setColor(Color.BLUE);
             answersTable.add(label).padRight(50);
 
 
@@ -241,7 +226,7 @@ public class PlayScreen implements Screen {
                     payload.setObject(label);
 
                     TextButton draggedLabel = new TextButton(label.getText().toString(), answerStyle);
-                    draggedLabel.setColor(Color.BLACK);
+                    draggedLabel.setColor(Color.BLUE);
 
                     payload.setDragActor(draggedLabel);
 
@@ -253,7 +238,6 @@ public class PlayScreen implements Screen {
 
                     if (target != null) {
                         attemptsCount +=1;
-                        incAttempts();
                         attempts.setText("attempts: " + attemptsCount);
                         if (label.getText().toString().equals(equation1.solveEquation())) {
                             correct.play();
@@ -323,7 +307,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         update(Gdx.graphics.getDeltaTime());
@@ -389,12 +373,9 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void incAttempts() {
-        player.incAttempts();
-    }
 
     public void incCorrectCount() {
-
+        player.incAttempts();
         player.incCurrentStreak();
         player.incCorrectCount();
         player.incPoints(1, timer);
@@ -410,6 +391,7 @@ public class PlayScreen implements Screen {
     }
 
     public void incWrongCount() {
+        player.incAttempts();
         player.resetCurrentStreak();
         player.incWrongCount();
         player.decPoints(1);

@@ -23,7 +23,7 @@ import java.io.IOException;
 public class MainMenu implements Screen {
 
     private Stage stage;
-    private BitmapFont font;
+    private BitmapFont font, digital;
     private TextureAtlas buttonAtlas;
     private TextButton.TextButtonStyle buttonStyle;
 
@@ -58,10 +58,10 @@ public class MainMenu implements Screen {
 
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        digital = new BitmapFont(Gdx.files.internal("digital.fnt"), false);
 
         style = new Label.LabelStyle();
-        style.font = font;
-        style.fontColor = Color.BLACK;
+        style.font = digital;
 
         title = new Label("Equation Dragger", style);
 
@@ -70,7 +70,7 @@ public class MainMenu implements Screen {
         buttonAtlas = skin.getAtlas();
         skin.addRegions(buttonAtlas);
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.fontColor = Color.BLACK;
+        buttonStyle.fontColor = Color.WHITE;
         buttonStyle.up = skin.getDrawable("button");
         buttonStyle.over = skin.getDrawable("button-pressed-over");
         buttonStyle.down = skin.getDrawable("button-pressed");
@@ -78,19 +78,23 @@ public class MainMenu implements Screen {
         buttonStyle.font = font;
 
         start = new TextButton("START", buttonStyle);
+        start.setColor(Color.BLUE);
         start.setSize(350,100);
 
         tutorial = new TextButton("TUTORIAL", buttonStyle);
+        tutorial.setColor(Color.BLUE);
         tutorial.setSize(350,100);
 
         stats = new TextButton("STATS", buttonStyle);
+        stats.setColor(Color.BLUE);
         stats.setSize(350,100);
 
         about = new TextButton("ABOUT", buttonStyle);
+        about.setColor(Color.BLUE);
         about.setSize(350,100);
 
 
-        title.setPosition(425, 625);
+        title.setPosition(350, 625);
         start.setPosition(500, 500 );
         tutorial.setPosition(500, 375);
         stats.setPosition(500, 250);
@@ -153,7 +157,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

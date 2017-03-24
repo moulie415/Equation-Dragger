@@ -8,7 +8,7 @@ import com.mygdx.game.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Title";
+		config.title = "Equation Dragger";
 		//config.useGL20 = true;
 		config.height = 720;
 		config.width = 1280;

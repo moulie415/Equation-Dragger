@@ -38,8 +38,7 @@ public class Stats implements Screen {
     private TextButton leaderboards;
     private TextButton.TextButtonStyle leaderBoardStyle;
     private TextButton achievements;
-    private BitmapFont font;
-    private BitmapFont font2;
+    private BitmapFont font, font2, digital;
     private Stage stage;
     private Viewport viewport;
     private int VIRTUAL_WIDTH;
@@ -60,9 +59,10 @@ public class Stats implements Screen {
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/button-click.wav"));
         font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         font2 = new BitmapFont(Gdx.files.internal("small.fnt"), false);
+        digital = new BitmapFont(Gdx.files.internal("digital.fnt"), false);
 
-        style = new Label.LabelStyle(font2, Color.BLACK);
-        style2 = new Label.LabelStyle(font, Color.BLACK);
+        style = new Label.LabelStyle(font2, Color.WHITE);
+        style2 = new Label.LabelStyle(digital, Color.WHITE);
 
         leaderBoardStyle = new TextButton.TextButtonStyle();
         leaderBoardStyle.up = crispy.getDrawable("button");
@@ -71,6 +71,7 @@ public class Stats implements Screen {
         leaderBoardStyle.font = font;
 
         leaderboards = new TextButton("Leaderboards", leaderBoardStyle);
+        leaderboards.setColor(Color.BLUE);
         leaderboards.setPosition(100, 500);
         stage.addActor(leaderboards);
         stats = new Label("YOUR STATS:", style2);
@@ -79,6 +80,7 @@ public class Stats implements Screen {
 
 
         achievements = new TextButton("Achievements", leaderBoardStyle);
+        achievements.setColor(Color.BLUE);
         achievements.setPosition(700, 500);
         stage.addActor(achievements);
 
@@ -167,8 +169,7 @@ public class Stats implements Screen {
 
     @Override
     public void render(float delta) {
-
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor((float)0.4,(float)0.6,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
