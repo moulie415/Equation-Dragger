@@ -35,7 +35,7 @@ public class PlayScreen3 implements Screen {
     private Skin skin;
     private Skin crispy;
     private BitmapFont font;
-    private float timeCount;
+    private float timeCount, mouseX, mouseY;
     private int timer;
     private Label timerLabel;
     private Label feedbackWrong;
@@ -68,7 +68,8 @@ public class PlayScreen3 implements Screen {
     private Sound wrong;
     private Music countdown;
     private Sound smokeWeed;
-    private boolean isPlaying = false;
+    private Texture hitmarker;
+    private boolean isPlaying = false, hmVisible = false;
 
 
 
@@ -80,6 +81,7 @@ public class PlayScreen3 implements Screen {
         wrong = Gdx.audio.newSound(Gdx.files.internal("sounds/2SED4AIRHORN_short.mp3"));
         countdown = Gdx.audio.newMusic(Gdx.files.internal("sounds/tactical_nuke.mp3"));
         smokeWeed = Gdx.audio.newSound(Gdx.files.internal("sounds/smoke_weed.mp3"));
+        hitmarker = new Texture(Gdx.files.internal("images/hitmarker.png"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -485,6 +487,22 @@ public class PlayScreen3 implements Screen {
                 return true;
             }
         });
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                // Some stuff
+                hmVisible = true;
+                mouseX = x;
+                mouseY = y;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                hmVisible = false;
+            }
+        });
     }
 
     @Override
@@ -493,6 +511,9 @@ public class PlayScreen3 implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         update(Gdx.graphics.getDeltaTime());
+        if (hmVisible) {
+            stage.getBatch().draw(hitmarker, mouseX-10, mouseY-10, 20, 20);
+        }
         stage.draw();
 
     }

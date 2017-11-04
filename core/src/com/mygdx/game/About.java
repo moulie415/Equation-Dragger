@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -38,16 +39,18 @@ public class About implements Screen {
     private Label.LabelStyle style2;
     private BitmapFont font;
     private Button close;
-    private Texture image;
+    private Texture image, hitmarker;
     private Button.ButtonStyle buttonStyle;
     private Sound click;
-    private Sound spooky;
+    private Music spooky;
+    private boolean hmVisible = false;
+    private float mouseX, mouseY;
 
     public About(Game game, Player player) {
         this.game = game;
         this.player = player;
         click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
-        spooky = Gdx.audio.newSound(Gdx.files.internal("sounds/SPOOKY.mp3"));
+        spooky = Gdx.audio.newMusic(Gdx.files.internal("sounds/SPOOKY.mp3"));
 
         VIRTUAL_WIDTH = 1280;
         VIRTUAL_HEIGHT = 720;
@@ -99,6 +102,7 @@ public class About implements Screen {
         close.setPosition(50, 650);
 
         image = new Texture(Gdx.files.internal("images/libgdx_logo.bmp"));
+        hitmarker = new Texture(Gdx.files.internal("images/hitmarker.png"));
 
     }
 
@@ -114,12 +118,13 @@ public class About implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("closed");
-                click.play();
                 spooky.dispose();
-                game.setScreen(new MainMenu(game, player));
                 return true;
             }
-
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MainMenu(game, player));
+            }
         });
 
         emailLink.addListener(new InputListener(){
@@ -127,6 +132,23 @@ public class About implements Screen {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.net.openURI("mailto:henry.moule@gmail.com");
                 return true;
+            }
+        });
+
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                System.out.println("henry test stage input listener");
+                hmVisible = true;
+                mouseX = x;
+                mouseY = y;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                hmVisible = false;
             }
         });
 
@@ -140,6 +162,9 @@ public class About implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.getBatch().begin();
         stage.getBatch().draw(image, 450, 230);
+        if (hmVisible) {
+            stage.getBatch().draw(hitmarker, mouseX-10, mouseY-10, 20, 20);
+        }
         stage.getBatch().end();
         stage.draw();
 

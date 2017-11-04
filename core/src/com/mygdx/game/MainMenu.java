@@ -12,11 +12,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.io.IOException;
 
 /**
  * Created by henrymoule on 04/01/2017.
@@ -42,8 +42,9 @@ public class MainMenu implements Screen {
     private int VIRTUAL_HEIGHT;
     private Sound click;
     private Music daniel;
-    private Texture doritos;
-    private Texture mtnDew;
+    private Texture doritos, mtnDew, hitmarker;
+    private boolean hmVisible = false;
+    private float mouseX, mouseY;
 
     public MainMenu(Game game, Player player ) {
         this.game = game;
@@ -52,7 +53,7 @@ public class MainMenu implements Screen {
         daniel = Gdx.audio.newMusic(Gdx.files.internal("sounds/daniel_uk.mp3"));
         doritos = new Texture(Gdx.files.internal("images/doritos-nacho-cheese.png"));
         mtnDew = new Texture(Gdx.files.internal("images/mountain-dew.jpg"));
-
+        hitmarker = new Texture(Gdx.files.internal("images/hitmarker.png"));
     }
 
     @Override
@@ -91,6 +92,7 @@ public class MainMenu implements Screen {
         start = new TextButton("START", buttonStyle);
         start.setSize(350,100);
 
+
         tutorial = new TextButton("TUTORIAL", buttonStyle);
         tutorial.setSize(350,100);
 
@@ -121,12 +123,13 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
                 daniel.dispose();
-                game.setScreen(new SectionScreen(game, player));
-
-
+                start.addAction(Actions.alpha(0.1f));
                 return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new SectionScreen(game, player));
             }
         });
 
@@ -134,11 +137,14 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
                 daniel.dispose();
-                game.setScreen(new Tutorial(game, player));
+                start.addAction(Actions.alpha(0.1f));
 
                 return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new Tutorial(game, player));
             }
         });
 
@@ -146,12 +152,14 @@ public class MainMenu implements Screen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                click.play();
                 daniel.dispose();
-
-                game.setScreen(new About(game, player));
+                start.addAction(Actions.alpha(0.1f));
 
                 return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new About(game, player));
             }
         });
 
@@ -160,11 +168,28 @@ public class MainMenu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                click.play();
                 daniel.dispose();
                 game.setScreen(new Stats(game, player));
 
                 return true;
+            }
+        });
+
+
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                    // Some stuff
+                    hmVisible = true;
+                    mouseX = x;
+                    mouseY = y;
+                    return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                hmVisible = false;
             }
         });
 
@@ -178,6 +203,9 @@ public class MainMenu implements Screen {
         stage.getBatch().begin();
         stage.getBatch().draw(doritos, 100, 100);
         stage.getBatch().draw(mtnDew, 850, 150);
+        if (hmVisible) {
+            stage.getBatch().draw(hitmarker, mouseX-10, mouseY-10, 20, 20);
+        }
         stage.getBatch().end();
         stage.draw();
 
