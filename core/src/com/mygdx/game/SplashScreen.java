@@ -1,20 +1,21 @@
 package com.mygdx.game;
 
 import aurelienribon.tweenengine.*;
-import aurelienribon.tweenengine.equations.Back;
-import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-import static com.sun.webkit.graphics.GraphicsDecoder.SCALE;
 
 /**
  * Created by hen10 on 11/03/2017.
@@ -30,28 +31,41 @@ public class SplashScreen implements Screen {
     private Game game;
     private Player player;
     private Music song;
+    private Texture hitmarker;
+    private float mouseX, mouseY;
+    private boolean hmVisible;
+    private Sound click;
+    private Stage stage;
+    private Viewport viewport;
+    private int VIRTUAL_WIDTH, VIRTUAL_HEIGHT;
 
 
     public SplashScreen(Game game, Player player) {
         this.game = game;
         this.player = player;
         song = Gdx.audio.newMusic(Gdx.files.internal("sounds/mlg_universal.mp3"));
+        hitmarker = new Texture(Gdx.files.internal("images/hitmarker.png"));
+        click = Gdx.audio.newSound(Gdx.files.internal("sounds/HITMARKER.mp3"));
         song.play();
 
     }
 
     @Override
     public void render(float delta) {
+        Gdx.input.setInputProcessor(stage);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        batch.begin();
-        splash.draw(batch);
-        splash2.draw(batch);
-        splash3.draw(batch);
-        splash4.draw(batch);
-        batch.end();
+        stage.getBatch().begin();
+        splash.draw(stage.getBatch());
+        splash2.draw(stage.getBatch());
+        splash3.draw(stage.getBatch());
+        splash4.draw(stage.getBatch());
+        if (hmVisible) {
+            stage.getBatch().draw(hitmarker, mouseX-10, mouseY-10, 20, 20);
+        }
+        stage.getBatch().end();
 
         tweenManager.update(delta);
     }
@@ -62,7 +76,12 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
+
+        VIRTUAL_WIDTH = 1280;
+        VIRTUAL_HEIGHT = 720;
         // apply preferences
+        viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT); //notice cam param here! (camera taken out)
+        stage = new Stage(viewport);
 
         batch = new SpriteBatch();
 
@@ -97,6 +116,22 @@ public class SplashScreen implements Screen {
         });    // and finally start it!*/
         tweenManager.update(Float.MIN_VALUE); // update once avoid short flash of splash before animation
 
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                click.play();
+                // Some stuff
+                hmVisible = true;
+                mouseX = x;
+                mouseY = y;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                hmVisible = false;
+            }
+        });
     }
 
     @Override
